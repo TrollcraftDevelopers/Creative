@@ -1,0 +1,88 @@
+name: Creative
+version: ${project.version}
+main: pl.trollcraft.creative.Creative
+api-version: 1.13
+author: SkepsonSk
+description: A creative server manager plugin.
+depends: [PlaceholderAPI]
+
+commands:
+  teleport:
+    description: A teleport command.
+    aliases: [tp]
+  tpa:
+    description: An accepted teleport command.
+  tpaccept:
+    description: A teleport command.
+    aliases: [tp]
+
+  rename:
+    description: Changes name of an item.
+    aliases: [nazwa]
+  lore:
+    description: Changes lore of an item.
+    aliases: [opis]
+
+  shop:
+    description: Displays the shop.
+    aliases: [sklep, skl, sho, shp]
+
+  tails:
+    description: Tails management command.
+    aliases: [ogony, ogon, ogo]
+  vehicles:
+    description: Vehicles management command.
+    aliases: [pojazdy, pojazd, poj]
+
+  redstonesign:
+    description: Creates a redstone sign.
+    aliases: [rs, reds, redsign]
+
+  gamemode:
+    description: Changes a gamemode of a player.
+    aliases: [gm]
+
+  event:
+    description: Makes players able to create their own mini-events.
+    aliases: [ev, zd, eve]
+
+  myplot:
+    description: Opens a menu allowing to control the plot.
+    aliases: [mp, mypl]
+
+  wed:
+    description: Debugs world edit restrictions;
+
+  prefixes:
+    description: Opens a prefixes shop and menu.
+    aliases: [prefixy, prefiksy, pref]
+
+  parkour:
+    description: Manages parkours.
+
+  pet:
+    description: Test command.
+
+  safety:
+    description: Safety manager allowing to run safety scans and leak resolving.
+
+  spawn:
+    description: Teleports to the spawn.
+
+  setspawn:
+    description: Sets the spawn point.
+
+  chat:
+    description: Chat management command.
+
+  broadcast:
+    description: Broadcasts a message to all players online.
+    aliases: [announce, bc, say]
+
+  message:
+    description: Private messaging system.
+    aliases: [msg, tell]
+
+  response:
+    description: Responses to recent messages.
+    aliases: [r]

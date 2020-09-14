@@ -1,0 +1,4 @@
+chatblockades:
+
+  '/(?=.*\\bset\\b)(?=.*\\b51\\b).+/g': # Jedynie komenda //set 51
+    action: block

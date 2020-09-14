@@ -1,0 +1,8 @@
+safety:
+  entities:
+    worlds:
+      - 'world'
+    remove:
+      - 'DROPPED_ITEM'
+  redstone:
+    limit: 10 # per chunk

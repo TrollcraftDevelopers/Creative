@@ -1,0 +1,49 @@
+shop: # główna karta sklepu
+  categories: # pierwsza karta w sklepie to karta kategorii.
+    tails: # sklep z ogonami (typu przedmiotowego)
+      iconItemStack: # ikonka sklepu w karcie wyżej
+        type: APPLE
+        data: 0
+        name: 'Ogony'
+      items: # przedmioty na sprzedaż
+        '0': # ID przedmiotu, najlepiej używać liczb
+          title: '&c&lSERDUSZKA'
+          lore:
+            - '&eWspaniale serduszka!'
+          slot: 8
+          price: 100
+          service: 'tails/heart' # usługa, która zostanie odblokowana graczowi po zakupie
+          iconItemStack:
+            type: APPLE
+            data: 0
+            name: 'Ogon z serduszek'
+        '1':
+          title: '&c&lEFEKT SKOKU!'
+          lore:
+            - '&eNiesamowite skoki'
+            - '&ew cenie dobrej w huj'
+          slot: 11
+          price: 100
+          service: 'specialitems/jumper'
+          iconItemStack:
+            type: APPLE
+            data: 0
+            name: 'Ogon z serduszek'
+    services: # kolejna karta z przedmiotami
+      iconItemStack:
+        type: APPLE
+        data: 0
+        name: 'Lubie wafle'
+      items:
+        '0':
+          title: '&c&lSZYBKI MOTOR'
+          lore:
+            - '&eWspanialy czarny motor!'
+          slot: 5
+          price: 100
+          service: 'vehicles/blackBike'
+          iconItemStack:
+            type: APPLE
+            data: 0
+
+# Możesz też tworzyć karty kategorii i tworzyć zaawansowany sklep.

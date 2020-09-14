@@ -1,0 +1,4 @@
+automessages:
+  interval: 60
+  messages:
+    - 'Wiadomosc testowa'

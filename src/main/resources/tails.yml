@@ -1,0 +1,8 @@
+tails:
+  hearts:
+    title: 'Serduszka'
+    particles: 'ColoredParticles/REDSTONE_DUST'
+    particlesData: '234:232:34:5' #r:g:b:size
+    amount: 5
+    data: 2
+    engine: ClassicTail

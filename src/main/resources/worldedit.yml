@@ -1,0 +1,18 @@
+worldedit:
+  '//set':
+    aliases: '/set,///set'
+    maxSelections:
+      default: '20,20,20'
+      vip: '30,30,30'
+      svip: '40,40,40'
+    arguments:
+      '0':
+        forbidden: '32,43,54,23'
+    cooldown:
+      default: 10
+      vip: 5
+      svip: 0
+    available:
+      default: 10
+      vip: 5
+      svip: 0

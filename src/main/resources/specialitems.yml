@@ -1,0 +1,11 @@
+specialitems:
+  jumper:
+    code: 1889
+    itemStack:
+      type: STICK
+      data: 0
+      name: '&a&lSkoczek'
+    effect:
+      type: JUMP
+      duration: 50
+      amplifier: 2

@@ -1,0 +1,13 @@
+prefixes:
+  '0':
+    name: Tworca
+    type: NORMAL
+    price: 100
+  '1':
+    name: ELO
+    type: NORMAL
+    price: 100
+  '2':
+    name: POMELO
+    type: NORMAL
+    price: 100

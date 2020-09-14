@@ -1,0 +1,7 @@
+chat:
+  'marriage':
+    condition: '{marriagemaster_partner} is-not empty'
+    format: '{marriagemaster_partner}'
+
+  'rest':
+    format: '{luckperms_suffix} {player_name}: %2$s'
