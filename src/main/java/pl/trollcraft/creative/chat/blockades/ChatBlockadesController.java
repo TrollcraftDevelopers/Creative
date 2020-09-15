@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.chat.blockades.actions.BlockadeAction;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 
 import java.util.Optional;
 import java.util.regex.Matcher;

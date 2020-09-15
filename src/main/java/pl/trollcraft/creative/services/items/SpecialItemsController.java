@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.core.items.ItemStackDeserializer;
 import pl.trollcraft.creative.services.ServiceManager;
 

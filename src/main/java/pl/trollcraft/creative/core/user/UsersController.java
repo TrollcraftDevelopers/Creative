@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 
 import java.util.logging.Level;
 

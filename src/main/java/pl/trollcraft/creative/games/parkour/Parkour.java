@@ -1,5 +1,7 @@
 package pl.trollcraft.creative.games.parkour;
 
+import com.google.common.collect.Lists;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +12,9 @@ import pl.trollcraft.creative.core.help.blocksdetector.DetectionRequest;
 import pl.trollcraft.creative.games.Attraction;
 import pl.trollcraft.creative.games.Result;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Parkour extends Attraction {
@@ -50,9 +54,30 @@ public class Parkour extends Attraction {
      */
     private Material endBlock;
 
-    public Parkour(String name, Player creator) {
+    public Parkour(String name, String creator) {
         super(TYPENAME, name, creator);
         playersCheckpoints = new HashMap<>();
+    }
+
+    /**
+     * A list of game modes allowed
+     * during the game.
+     *
+     * @return List of GameModes
+     */
+    @Override
+    public List<GameMode> getGameModesAllowed() {
+        return Arrays.asList(new GameMode[] { GameMode.ADVENTURE });
+    }
+
+    /**
+     * GameMode the players are set to.
+     *
+     * @return GameMode
+     */
+    @Override
+    public GameMode getGameMode() {
+        return GameMode.ADVENTURE;
     }
 
     /**
@@ -131,6 +156,7 @@ public class Parkour extends Attraction {
     public void end(Player player) {
         BlockDetector detector = Creative.getPlugin().getBlockDetector();
         detector.undefine(player, TYPENAME);
+        playersCheckpoints.remove(player);
     }
 
     /**
@@ -184,4 +210,50 @@ public class Parkour extends Attraction {
         this.endBlock = endBlock;
     }
 
+    /**
+     * Gets the start location.
+     *
+     * @return startLocation - start location of the parkour.
+     */
+    public Location getStartLocation() {
+        return startLocation;
+    }
+
+    /**
+     * Gets the checkpoint block.
+     *
+     * @return checkpointBlock - checkpoint block.
+     */
+    public Material getCheckpointBlock() {
+        return checkpointBlock;
+    }
+
+    /**
+     * Gets the fall block.
+     *
+     * @return fallBlock - fall block.
+     */
+    public Material getFallBlock() {
+        return fallBlock;
+    }
+
+    /**
+     * Gets the end block.
+     *
+     * @return endBlock - end block.
+     */
+    public Material getEndBlock() {
+        return endBlock;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+        if (obj instanceof String) {
+            String name = (String) obj;
+            return getName().equals(name);
+        }
+        return super.equals(obj);
+
+    }
 }

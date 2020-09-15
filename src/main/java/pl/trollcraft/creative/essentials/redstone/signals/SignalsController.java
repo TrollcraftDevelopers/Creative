@@ -1,7 +1,7 @@
 package pl.trollcraft.creative.essentials.redstone.signals;
 
 import org.bukkit.block.Block;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 
 import java.util.Optional;
 

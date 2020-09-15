@@ -2,7 +2,7 @@ package pl.trollcraft.creative.safety.worldedit;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.core.user.GroupValues;
 
 import java.util.ArrayList;

@@ -4,7 +4,7 @@ main: pl.trollcraft.creative.Creative
 api-version: 1.13
 author: SkepsonSk
 description: A creative server manager plugin.
-depends: [PlaceholderAPI]
+depends: [PlaceholderAPI, PlotSquared, Multiverse-Core]
 
 commands:
   teleport:

@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.safety.leaks.entities.EntitiesSafetyProvider;
 import pl.trollcraft.creative.safety.leaks.redstone.RedstoneSafetyProvider;
 

@@ -19,7 +19,7 @@ import pl.trollcraft.creative.chat.commands.ResponseCommand;
 import pl.trollcraft.creative.chat.config.ChatConfig;
 import pl.trollcraft.creative.core.commands.CommandsManager;
 import pl.trollcraft.creative.core.Perspectivum;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.core.events.DoubleClickHandler;
 import pl.trollcraft.creative.core.gui.GUIManager;
 import pl.trollcraft.creative.core.gui.InventoryListener;
@@ -33,7 +33,8 @@ import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
 import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
-import pl.trollcraft.creative.essentials.moneysigns.MoneySignListener;
+import pl.trollcraft.creative.essentials.money.MoneySignListener;
+import pl.trollcraft.creative.essentials.money.ScheduledMoneyManager;
 import pl.trollcraft.creative.essentials.redstone.RedstoneSignSignalizer;
 import pl.trollcraft.creative.essentials.redstone.SignalsCommand;
 import pl.trollcraft.creative.essentials.redstone.signals.SignalsController;
@@ -41,7 +42,9 @@ import pl.trollcraft.creative.essentials.spawn.SetSpawnCommand;
 import pl.trollcraft.creative.essentials.spawn.SpawnCommand;
 import pl.trollcraft.creative.games.AttractionsController;
 import pl.trollcraft.creative.games.AttractionsListener;
+import pl.trollcraft.creative.games.parkour.Parkour;
 import pl.trollcraft.creative.games.parkour.ParkourCommand;
+import pl.trollcraft.creative.games.parkour.ParkourPersistenceManager;
 import pl.trollcraft.creative.plots.PlotManagerCommand;
 import pl.trollcraft.creative.plots.PlotsListener;
 import pl.trollcraft.creative.plots.metadata.PlotsMetaDataController;
@@ -112,6 +115,7 @@ public final class Creative extends Perspectivum {
     private PrefixesController prefixesController;
     private AttractionsController attractionsController;
     private Controller<ShopSession, Player> shopSessionsController;
+    private Controller<Parkour, String> parkoursController;
 
     private ChatCreator chatCreator;
 
@@ -166,6 +170,7 @@ public final class Creative extends Perspectivum {
         prefixesController = new PrefixesController();
         attractionsController = new AttractionsController();
         shopSessionsController = new Controller<>();
+        parkoursController = new Controller<>();
 
         chatBlockadesController.load();
         vehiclesController.load();
@@ -173,11 +178,6 @@ public final class Creative extends Perspectivum {
         limitsController.load();
         worldEditCommandsController.load();
         prefixesController.load();
-    }
-
-    @Override
-    public void onLoad() {
-        //CustomMobs.mobs();
     }
 
     @Override
@@ -196,6 +196,12 @@ public final class Creative extends Perspectivum {
 
         new DoubleClickHandler(this);
         SpecialItemsListener.listen();
+
+        ScheduledMoneyManager.init();
+
+        ParkourPersistenceManager parkourPersistenceManager = ParkourPersistenceManager.newInstance();
+        parkourPersistenceManager.setWaitTimeBeforeLoad(30);
+        registerPersistenceManager(parkourPersistenceManager);
     }
 
     @Override
@@ -248,6 +254,11 @@ public final class Creative extends Perspectivum {
 
     // --------
 
+    /**
+     * Loads Vault economy environment.
+     *
+     * @return boolean status of Vault loading.
+     */
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
@@ -361,5 +372,8 @@ public final class Creative extends Perspectivum {
     public SafetyProviderController getSafetyProviderController() {
         return safetyProviderController;
     }
+
+    public Controller<Parkour, String> getParkoursController() { return parkoursController; }
+
 }
 

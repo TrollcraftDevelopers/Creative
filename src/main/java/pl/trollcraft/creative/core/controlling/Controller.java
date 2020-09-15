@@ -1,4 +1,4 @@
-package pl.trollcraft.creative.core.controller;
+package pl.trollcraft.creative.core.controlling;
 
 import java.util.ArrayList;
 import java.util.List;

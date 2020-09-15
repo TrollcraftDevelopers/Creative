@@ -2,7 +2,7 @@ package pl.trollcraft.creative.prefixes.obj;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.core.help.Colors;
 
 public class PrefixesController extends Controller<Prefix, String> {

@@ -9,7 +9,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class BlockDetector implements Listener {
 
@@ -28,10 +30,17 @@ public class BlockDetector implements Listener {
      */
     private HashMap<DetectionRequest, Block> ignore;
 
+    /**
+     * A list of requests that should be removed on start
+     * of next session.
+     */
+    private ArrayList<DetectionRequest> requestsToRemove;
+
     public BlockDetector(Plugin plugin) {
         this.plugin = plugin;
         requests = new ArrayList<>();
         ignore = new HashMap<>();
+        requestsToRemove = new ArrayList<>();
     }
 
     /**
@@ -44,6 +53,13 @@ public class BlockDetector implements Listener {
 
             @Override
             public void run() {
+
+                if (!requestsToRemove.isEmpty())
+                    requestsToRemove.forEach(req -> {
+                        requests.remove(req);
+                        if (ignore.containsKey(req))
+                            ignore.remove(req);
+                    });
 
                 requests.forEach( request -> {
 
@@ -94,7 +110,13 @@ public class BlockDetector implements Listener {
      * @param tag
      */
     public boolean undefine(Player player, String tag) {
-        return requests.removeIf( request -> request.getPlayer().equals(player) && request.getTag().equals(tag) );
+        List<DetectionRequest> requestsToRemove = requests.stream()
+                .filter(req -> req.getPlayer().equals(player))
+                .filter(req -> req.getTag().equals(tag))
+                .collect(Collectors.toList());
+
+        this.requestsToRemove.addAll(requestsToRemove);
+        return !requestsToRemove.isEmpty();
     }
 
 }

@@ -23,13 +23,16 @@ public class WorldEditListener implements Listener {
     @EventHandler
     public void onCommand (PlayerCommandPreprocessEvent event) {
 
+        Player player = event.getPlayer();
+
+        if (player.hasPermission("creative.admin")) return;
+
         String[] command = event.getMessage().split(" ");
         WorldEditCommand worldEditCommand = controller.find(command[0]);
 
         if (worldEditCommand == null)
             return;
 
-        Player player = event.getPlayer();
         User user = usersController.find(player.getName());
         WorldEditComponent component = (WorldEditComponent) user.getComponent(WorldEditComponent.COMP_NAME);
 

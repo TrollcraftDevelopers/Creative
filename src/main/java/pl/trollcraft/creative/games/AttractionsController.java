@@ -1,7 +1,7 @@
 package pl.trollcraft.creative.games;
 
 import org.bukkit.entity.Player;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,7 +75,7 @@ public class AttractionsController extends Controller<Attraction, String> {
      */
     public List<Attraction> findAll(Player player, String type) {
         return instances.stream()
-                .filter( attraction -> attraction.equals(player) )
+                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
                 .filter( attraction -> attraction.getType().equals(type) )
                 .collect(Collectors.toList());
     }
@@ -89,7 +89,7 @@ public class AttractionsController extends Controller<Attraction, String> {
      */
     public List<Attraction> findAll(Player player) {
         return instances.stream()
-                .filter( attraction -> attraction.equals(player) )
+                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
                 .collect(Collectors.toList());
     }
 
@@ -102,7 +102,7 @@ public class AttractionsController extends Controller<Attraction, String> {
      */
     public Attraction findConserved(Player player, String type) {
         return instances.stream()
-                .filter( attraction -> attraction.equals(player) )
+                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
                 .filter( attraction -> attraction.isConserved())
                 .filter( attraction -> attraction.getType().equals(type) )
                 .findFirst()
@@ -118,7 +118,7 @@ public class AttractionsController extends Controller<Attraction, String> {
      */
     public Attraction findConserved(Player player) {
         return instances.stream()
-                .filter( attraction -> attraction.equals(player) )
+                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
                 .filter( attraction -> attraction.isConserved())
                 .findFirst()
                 .orElse(null);

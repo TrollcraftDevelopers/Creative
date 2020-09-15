@@ -2,7 +2,7 @@ package pl.trollcraft.creative.services.vehicles;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import pl.trollcraft.creative.core.Configs;
-import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.services.ServiceManager;
 
 public class VehiclesController extends Controller<Vehicle, String> {

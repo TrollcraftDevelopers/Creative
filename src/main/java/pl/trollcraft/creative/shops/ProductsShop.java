@@ -53,8 +53,10 @@ public class ProductsShop implements Shop {
 
                 if (!allowed) {
 
-                    finalProduct.purchase(player);
-                    open(player);
+                    if (finalProduct.purchase(player))
+                        open(player);
+                    else
+                        player.sendMessage(Colors.color("&cBrak srodkow do zakupu."));
 
                 }
 

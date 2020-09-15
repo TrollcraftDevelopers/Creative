@@ -102,7 +102,7 @@ public class ParkourCommand extends CommandController {
                 return;
             }
 
-            Parkour parkour = new Parkour(name, player);
+            Parkour parkour = new Parkour(name, player.getName());
             parkour.setConserved(true);
 
             attractionsController.register(parkour);
@@ -186,6 +186,8 @@ public class ParkourCommand extends CommandController {
             }
 
             parkour.setConserved(false);
+
+            Creative.getPlugin().getParkoursController().register(parkour);
 
             player.sendMessage(Colors.color("&aParkour zostal sprawdzony i opublikowany.\n" +
                     "&eMozna na niego wejsc komenda: /parkour dolacz " + parkour.getName()));

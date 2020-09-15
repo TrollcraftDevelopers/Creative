@@ -1,4 +1,4 @@
-package pl.trollcraft.creative.essentials.moneysigns;
+package pl.trollcraft.creative.essentials.money;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

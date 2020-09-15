@@ -1,7 +1,10 @@
 package pl.trollcraft.creative.shops;
 
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.services.Service;
 
@@ -55,10 +58,17 @@ public class Product {
         return price;
     }
 
-    //TODO add economy handling
     public boolean purchase(Player player) {
-        service.allow(player);
-        return true;
+
+        Economy economy = Creative.getPlugin().getEconomy();
+        EconomyResponse res = economy.withdrawPlayer(player, price);
+
+        if (res.transactionSuccess()) {
+            service.allow(player);
+            return true;
+        }
+
+        return false;
     }
 
 }

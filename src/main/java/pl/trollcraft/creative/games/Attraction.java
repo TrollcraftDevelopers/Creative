@@ -1,8 +1,10 @@
 package pl.trollcraft.creative.games;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -25,7 +27,7 @@ public abstract class Attraction {
      * Creator of the game.
      * Also owner.
      */
-    private Player creator;
+    private String creator;
 
     /**
      * Players who take part in creator's
@@ -51,13 +53,28 @@ public abstract class Attraction {
      *
      * @param type
      */
-    public Attraction(String type, String name, Player creator) {
+    public Attraction(String type, String name, String creator) {
         this.type = type;
         this.name = name;
         this.creator = creator;
         participants = new HashSet<>();
         conserved = false;
     }
+
+    /**
+     * A list of game modes allowed
+     * during the game.
+     *
+     * @return List of GameModes
+     */
+    public abstract List<GameMode> getGameModesAllowed();
+
+    /**
+     * GameMode the players are set to.
+     *
+     * @return GameMode
+     */
+    public abstract GameMode getGameMode();
 
     /**
      * Tests if attraction
@@ -87,6 +104,8 @@ public abstract class Attraction {
         else return Result.ALREADY_JOINED;
 
         setup(player);
+        player.setGameMode(getGameMode());
+
         return Result.JOINED;
     }
 
@@ -110,13 +129,15 @@ public abstract class Attraction {
 
         participants.remove(player);
         end(player);
+        player.setGameMode(GameMode.CREATIVE);
+
         return Result.LEFT;
     }
 
     /**
      * @returns creator of the game.
      */
-    public Player getCreator() {
+    public String getCreator() {
         return creator;
     }
 
