@@ -12,10 +12,10 @@ public final class ScheduledMoneyManager {
     public static void init() {
 
         GroupValues<Double> money = new GroupValues<>()
-                .add("creative.mvip", 12)
-                .add("creative.svip", 8)
-                .add("creative.vip", 5)
-                .add("creative.player", 2);
+                .add("creative.mvip", 12.0)
+                .add("creative.svip", 8.0)
+                .add("creative.vip", 5.0)
+                .add("creative.player", 2.0);
 
         Economy economy = Creative.getPlugin().getEconomy();
 

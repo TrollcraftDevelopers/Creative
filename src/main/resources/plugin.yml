@@ -7,13 +7,18 @@ description: A creative server manager plugin.
 depends: [PlaceholderAPI, PlotSquared, Multiverse-Core]
 
 commands:
+
   teleport:
     description: A teleport command.
     aliases: [tp]
+  tphere:
+    description: Teleports target to the sender.
   tpa:
     description: An accepted teleport command.
   tpaccept:
-    description: A teleport command.
+    description: Accepts a teleport demand.
+  tpdeny:
+    description: Refuses a teleport demand.
     aliases: [tp]
 
   rename:
@@ -86,3 +91,11 @@ commands:
   response:
     description: Responses to recent messages.
     aliases: [r]
+
+  sit:
+    description: Makes the player sit.
+    aliases: [usiadz, siadz]
+
+  gry:
+    description: Games command.
+    aliases: [games, gra, game]

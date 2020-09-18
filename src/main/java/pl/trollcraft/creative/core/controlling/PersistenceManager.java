@@ -2,7 +2,7 @@ package pl.trollcraft.creative.core.controlling;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.scheduler.BukkitRunnable;
+
 import pl.trollcraft.creative.core.Configs;
 
 import java.util.logging.Level;
@@ -56,6 +56,13 @@ public abstract class PersistenceManager<T, Z> {
     private long waitTimeBeforeLoad;
 
     /**
+     * Defines if Persistence Manager
+     * should start saving data on server
+     * stop.
+     */
+    private boolean shouldSave;
+
+    /**
      * Defines a resource file and root.
      *
      * An inheriting class should
@@ -72,6 +79,7 @@ public abstract class PersistenceManager<T, Z> {
         this.resourceName = resourceName;
         this.root = root;
         this.controller = controller;
+        shouldSave = true;
         waitTimeBeforeLoad = 0;
     }
 
@@ -92,6 +100,8 @@ public abstract class PersistenceManager<T, Z> {
 
             if (!reg)
                 Bukkit.getLogger().log(Level.WARNING, "PersistenceManager " + name + " returned an error while loading data.");
+            else
+                Bukkit.getLogger().log(Level.INFO, "Loaded " + key);
 
         } );
 
@@ -102,6 +112,8 @@ public abstract class PersistenceManager<T, Z> {
      * Starts saving the data.
      */
     public final void beginSaving() {
+        if (!shouldSave) return;
+
         Bukkit.getLogger().log(Level.INFO, "PersistenceManager " + name + " is beginning to save...");
         controller.getInstances().forEach( obj -> save(obj) );
         Configs.save(configuration, resourceName);
@@ -182,5 +194,15 @@ public abstract class PersistenceManager<T, Z> {
      */
     public long getWaitTimeBeforeLoad() {
         return waitTimeBeforeLoad;
+    }
+
+    /**
+     * Defines if data should be
+     * saved on server stop.
+     *
+     * @param shouldSave
+     */
+    public void setShouldSave(boolean shouldSave) {
+        this.shouldSave = shouldSave;
     }
 }

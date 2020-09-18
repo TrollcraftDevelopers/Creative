@@ -9,13 +9,13 @@ import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.help.blocksdetector.BlockDetector;
 import pl.trollcraft.creative.core.help.blocksdetector.DetectionRequest;
-import pl.trollcraft.creative.games.AttractionsController;
+import pl.trollcraft.creative.games.PlayablesController;
 import pl.trollcraft.creative.games.Result;
 
 public class ParkourCommand extends CommandController {
 
-    private AttractionsController attractionsController
-            = Creative.getPlugin().getAttractionsController();
+    private PlayablesController playablesController
+            = Creative.getPlugin().getPlayablesController();
 
     @Override
     public void command(CommandSender sender, String label, String[] args) {
@@ -28,11 +28,6 @@ public class ParkourCommand extends CommandController {
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage(Colors.color("&aParkour'y - obsluga:"));
-            player.sendMessage(Colors.color("&e/parkour dolacz <nazwa> -&7 dolacz do parkour'u,"));
-            player.sendMessage(Colors.color("&e/parkour opusc - &7opuszcza parkour,"));
-            player.sendMessage(Colors.color("&e/parkour <gracz> - &7parkour'y podanego gracza."));
-            player.sendMessage("");
             player.sendMessage(Colors.color("&aParkoury - tworzenie:"));
             player.sendMessage(Colors.color("&e/parkour nowy <nazwa> - &7tworzy nowy parkour,"));
             player.sendMessage(Colors.color("&e/parkour lokacja start - &7okresla poczatek parkour'u,"));
@@ -41,37 +36,6 @@ public class ParkourCommand extends CommandController {
             player.sendMessage(Colors.color("&e/parkour blok koniec - &7tworzy blok zakonczenia parkour'u,"));
             player.sendMessage(Colors.color("&e/parkour opublikuj - &7sprawdza i uruchamia parkour."));
             return;
-        }
-
-        else if (args[0].equalsIgnoreCase("dolacz")) {
-
-            if (args.length != 2) {
-                player.sendMessage(Colors.color("&eUzycie: &7/parkour dolacz <nazwa>"));
-                return;
-            }
-
-            String name = args[1];
-            Parkour parkour = (Parkour) attractionsController.find(name, Parkour.TYPENAME);
-
-            if (parkour == null) {
-                player.sendMessage(Colors.color("&cParkour o podanej nazwie nie istnieje."));
-                return;
-            }
-
-            if (parkour.isConserved()) {
-                player.sendMessage(Colors.color("&cParkour o podanej nazwie jest konserwowany."));
-                return;
-            }
-
-            Result result = parkour.join(player);
-            if (result != Result.JOINED){
-                player.sendMessage(Colors.color("&c" + result.getMessage()));
-                return;
-            }
-
-            player.sendMessage(Colors.color("&aDolaczono na parkour."));
-            return;
-
         }
 
         else if (args[0].equalsIgnoreCase("nowy")) {
@@ -83,12 +47,12 @@ public class ParkourCommand extends CommandController {
 
             // Check if player is playing or creating a game.
 
-            if (attractionsController.find(player, Parkour.TYPENAME) != null) {
+            if (playablesController.find(player, Parkour.TYPENAME) != null) {
                 player.sendMessage(Colors.color("&cObecnie grasz - nie mozesz tworzyc gry."));
                 return;
             }
 
-            if (attractionsController.findConserved(player) != null){
+            if (playablesController.findConserved(player) != null){
                 player.sendMessage(Colors.color("&cObecnie tworzysz juz gre."));
                 return;
             }
@@ -97,7 +61,7 @@ public class ParkourCommand extends CommandController {
 
             String name = args[1];
 
-            if (attractionsController.find(name) != null) {
+            if (playablesController.find(name) != null) {
                 player.sendMessage(Colors.color("&cGra o takiej nazwie juz istnieje."));
                 return;
             }
@@ -105,7 +69,7 @@ public class ParkourCommand extends CommandController {
             Parkour parkour = new Parkour(name, player.getName());
             parkour.setConserved(true);
 
-            attractionsController.register(parkour);
+            playablesController.register(parkour);
 
             player.sendMessage(Colors.color("&aParkour zostal utworzony. Teraz nalezy go skonfigurowac.\n" +
                     "&7Gdy zakonczysz konfiguracje - uzyj komendy /parkour opublikuj."));
@@ -120,7 +84,7 @@ public class ParkourCommand extends CommandController {
                 return;
             }
 
-            Parkour parkour = (Parkour) attractionsController.findConserved(player, Parkour.TYPENAME);
+            Parkour parkour = (Parkour) playablesController.findConserved(player, Parkour.TYPENAME);
 
             if (parkour == null) {
                 player.sendMessage(Colors.color("&cNie konserwujesz zadnego parkour'a."));
@@ -141,7 +105,7 @@ public class ParkourCommand extends CommandController {
                 return;
             }
 
-            Parkour parkour = (Parkour) attractionsController.findConserved(player, Parkour.TYPENAME);
+            Parkour parkour = (Parkour) playablesController.findConserved(player, Parkour.TYPENAME);
 
             if (parkour == null) {
                 player.sendMessage(Colors.color("&cNie konserwujesz zadnego parkour'a."));
@@ -171,7 +135,7 @@ public class ParkourCommand extends CommandController {
         }
         else if (args[0].equalsIgnoreCase("opublikuj")) {
 
-            Parkour parkour = (Parkour) attractionsController.findConserved(player, Parkour.TYPENAME);
+            Parkour parkour = (Parkour) playablesController.findConserved(player, Parkour.TYPENAME);
 
             if (parkour == null) {
                 player.sendMessage(Colors.color("&cNie konserwujesz zadnego parkour'a."));
@@ -186,11 +150,12 @@ public class ParkourCommand extends CommandController {
             }
 
             parkour.setConserved(false);
+            parkour.setCreated(System.currentTimeMillis());
 
             Creative.getPlugin().getParkoursController().register(parkour);
 
             player.sendMessage(Colors.color("&aParkour zostal sprawdzony i opublikowany.\n" +
-                    "&eMozna na niego wejsc komenda: /parkour dolacz " + parkour.getName()));
+                    "&eMozna na niego wejsc komenda: /gra dolacz " + parkour.getName()));
 
             return;
 

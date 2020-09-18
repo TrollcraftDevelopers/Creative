@@ -14,6 +14,7 @@ import pl.trollcraft.creative.core.help.Help;
 import pl.trollcraft.creative.core.user.User;
 import pl.trollcraft.creative.core.user.UserCreateEvent;
 import pl.trollcraft.creative.core.user.UsersController;
+import pl.trollcraft.creative.safety.blocks.LimitsController;
 
 public class WorldEditListener implements Listener {
 
@@ -60,6 +61,13 @@ public class WorldEditListener implements Listener {
             if (arg.containsForbidden(command[i])) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(Colors.color("&c&lUWAGA! &cKomenda zawiera zablokowane bloki."));
+                return;
+            }
+
+            LimitsController limitsController = Creative.getPlugin().getLimitsController();
+            if (limitsController.isLimited(command[i])) {
+                event.setCancelled(true);
+                event.getPlayer().sendMessage(Colors.color("&c&lUWAGA! &cKomenda zawiera bloki, ktore sa ograniczone."));
                 return;
             }
 

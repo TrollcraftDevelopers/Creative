@@ -2,6 +2,7 @@ package pl.trollcraft.creative.games;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import pl.trollcraft.creative.core.help.Colors;
 
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Set;
  * A game representing model.
  * A base for any game type.
  */
-public abstract class Attraction {
+public abstract class Attraction implements Playable {
 
     /**
      * A type of the game
@@ -36,10 +37,29 @@ public abstract class Attraction {
     private Set<Player> participants;
 
     /**
-     * When a player last used this
+     * When the attraction
+     * was created.
+     */
+    private long created;
+
+    /**
+     * When a player last played this
      * attraction.
      */
-    private long lastUsed;
+    private long lastPlayed;
+
+    /**
+     * Amount of players who tried to
+     * play this attraction.
+     * Not original players.
+     */
+    private int playedBy;
+
+    /**
+     * Amount of players who managed to
+     * finish this attraction.
+     */
+    private int finishedBy;
 
     /**
      * Is the attraction currently
@@ -58,6 +78,7 @@ public abstract class Attraction {
         this.name = name;
         this.creator = creator;
         participants = new HashSet<>();
+        lastPlayed = 0;
         conserved = false;
     }
 
@@ -106,6 +127,9 @@ public abstract class Attraction {
         setup(player);
         player.setGameMode(getGameMode());
 
+        playedBy++;
+        lastPlayed = System.currentTimeMillis();
+
         return Result.JOINED;
     }
 
@@ -151,6 +175,7 @@ public abstract class Attraction {
     /**
      * @return name of the parkour.
      */
+    @Override
     public String getName() {
         return name;
     }
@@ -158,6 +183,7 @@ public abstract class Attraction {
     /**
      * @returns type of the game.
      */
+    @Override
     public String getType() {
         return type;
     }
@@ -165,8 +191,33 @@ public abstract class Attraction {
     /**
      * @returns boolean if attraction is conserved.
      */
+    @Override
     public boolean isConserved() {
         return conserved;
+    }
+
+    @Override
+    public long getCreationTime() {
+        return created;
+    }
+
+    @Override
+    public long getLastPlayed() {
+        return lastPlayed;
+    }
+
+    @Override
+    public int getPlayedBy() {
+        return playedBy;
+    }
+
+    @Override
+    public int getFinishedBy() {
+        return finishedBy;
+    }
+
+    public void finished() {
+        finishedBy++;
     }
 
     /**
@@ -175,6 +226,22 @@ public abstract class Attraction {
      */
     public void setConserved(boolean conserved) {
         this.conserved = conserved;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public void setLastPlayed(long lastPlayed) {
+        this.lastPlayed = lastPlayed;
+    }
+
+    public void setPlayedBy(int playedBy) {
+        this.playedBy = playedBy;
+    }
+
+    public void setFinishedBy(int finishedBy) {
+        this.finishedBy = finishedBy;
     }
 
     @Override
@@ -193,4 +260,5 @@ public abstract class Attraction {
         return super.equals(obj);
 
     }
+
 }

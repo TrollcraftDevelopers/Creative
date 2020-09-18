@@ -57,7 +57,7 @@ public class Vehicle implements Service {
         String name = player.getName();
         UsersController usersController = Creative.getPlugin().getUserController();
         User user = usersController.find(name);
-        VehiclesComponent vehiclesComponent = (VehiclesComponent) user.getComponent(VehiclesComponent.COMP_NAME);
+        VehiclesComponent vehiclesComponent = user.findComponent(VehiclesComponent.COMP_NAME);
         vehiclesComponent.addVehicle(id);
     }
 

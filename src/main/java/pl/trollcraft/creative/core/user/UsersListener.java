@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.trollcraft.creative.Creative;
+import pl.trollcraft.creative.services.pets.PetsComponent;
 import pl.trollcraft.creative.services.tails.TailsComponent;
 import pl.trollcraft.creative.services.vehicles.VehiclesComponent;
 
@@ -30,8 +31,6 @@ public class UsersListener implements Listener {
 
         if (user == null || user.isEmpty()) return;
 
-        Bukkit.getConsoleSender().sendMessage("Saving " + name);
-
         controller.save(user);
         controller.unregister(user);
     }
@@ -45,6 +44,9 @@ public class UsersListener implements Listener {
 
         if (user.getComponent(VehiclesComponent.COMP_NAME) == null)
             user.addComponent(new VehiclesComponent());
+
+        if (user.getComponent(PetsComponent.COMP_NAME) == null)
+            user.addComponent(new PetsComponent());
 
     }
 

@@ -1,11 +1,9 @@
 package pl.trollcraft.creative.core.items;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 import pl.trollcraft.creative.core.help.Colors;
 
 import java.util.List;
@@ -25,11 +23,7 @@ public class ItemStackDeserializer {
 
     private void deserialize() {
 
-        Bukkit.getConsoleSender().sendMessage("Trying to: " + path);
-
         String sType = conf.getString(path + ".type");
-
-        Bukkit.getConsoleSender().sendMessage(sType);
 
         Material type = Material.getMaterial(sType);
 

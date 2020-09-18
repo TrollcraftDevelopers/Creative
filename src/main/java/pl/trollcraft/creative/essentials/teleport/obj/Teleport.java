@@ -1,6 +1,5 @@
-package pl.trollcraft.creative.essentials.teleport;
+package pl.trollcraft.creative.essentials.teleport.obj;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 /**

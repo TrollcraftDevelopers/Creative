@@ -26,8 +26,6 @@ public class ShopManager {
         ItemStackDeserializer deserializer;
         ItemStack iconItemStack;
         int slot;
-        Service service;
-        float price;
 
         // NO RECURSION;
         if (conf.contains(path + ".items")) {

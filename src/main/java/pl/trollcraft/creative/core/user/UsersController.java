@@ -34,8 +34,6 @@ public class UsersController extends Controller<User, String> {
         String name = player.getName();
         YamlConfiguration conf = Configs.load("users.yml");
 
-        Bukkit.getServer().getLogger().log(Level.INFO, "Instantiated user and registered.");
-
         User user = new User(name);
         register(user);
 
@@ -45,8 +43,6 @@ public class UsersController extends Controller<User, String> {
                     = conf.getConfigurationSection(String.format("users.%s", name));
 
             components.getKeys(false).forEach( compName -> {
-
-                Bukkit.getLogger().log(Level.INFO, compName);
 
                 Class clazz = componentsController.getComponentClass(compName);
                 UserComponent component = null;
@@ -66,7 +62,6 @@ public class UsersController extends Controller<User, String> {
                     e.printStackTrace();
                 }
 
-                Bukkit.getLogger().log(Level.INFO, String.format("users.%s.%s", name, compName));
                 component.load(conf, String.format("users.%s.%s", name, compName), player);
 
                 user.addComponent(component);

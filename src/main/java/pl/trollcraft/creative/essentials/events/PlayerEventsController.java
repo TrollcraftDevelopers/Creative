@@ -1,9 +1,13 @@
 package pl.trollcraft.creative.essentials.events;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.trollcraft.creative.Creative;
+import pl.trollcraft.creative.core.help.Colors;
 
 import java.util.*;
 
@@ -60,7 +64,14 @@ public class PlayerEventsController {
 
     public void organize(Player player, String title) {
         PlayerEvent playerEvent = new PlayerEvent(player, title);
-        announce(playerEvent);
+
+        TextComponent message = new TextComponent(ChatColor.GREEN + "\nNOWY EVENT!\n" +
+                ChatColor.GREEN + "Organizator: " + ChatColor.YELLOW + player.getName() + "\n\n" +
+                ChatColor.GREEN + "Nazwa: " + ChatColor.YELLOW + title + "\n\n" +
+                ChatColor.YELLOW + "Kliknij, by dolaczyc!\n");
+        message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/event dolacz " + player.getName()));
+        Bukkit.getOnlinePlayers().forEach( p -> p.spigot().sendMessage(message) );
+
         newEvents.put(playerEvent, System.currentTimeMillis() + 1000 * 60 * 5);
     }
 
@@ -113,13 +124,6 @@ public class PlayerEventsController {
         return false;
     }
 
-    private void announce(PlayerEvent event) {
-        Bukkit.getOnlinePlayers().stream()
-                .filter(player -> event.getOwner().getEntityId() != player.getEntityId())
-                .filter(this::participates)
-                .forEach(player -> player.sendMessage(event.toAnnouncement()));
-    }
-
     public void finish(PlayerEvent playerEvent) {
 
         Player player = playerEvent.getOwner();
@@ -131,9 +135,13 @@ public class PlayerEventsController {
         else if (player.hasPermission("creative.vip"))
             delay = 1000 * 60 * 3;
 
+        playerEvent.teleportBack();
+
         if (player != null && player.isOnline())
-            playerEvent.getOwner().sendMessage("&7Twoj event zostal zakonczony automatycznie.\n" +
-                "&eKolejny bedziesz mogl zorganizowac za " + (delay/ 1000 / 60) + " minut.");
+            playerEvent.getOwner().sendMessage(Colors.color("&7Twoj event zostal zakonczony automatycznie.\n" +
+                "&eKolejny bedziesz mogl zorganizowac za " + (delay/ 1000 / 60) + " minut."));
+
+        playerEvent.message("&cEvent zakonczyl sie!");
 
         toRemove.add(playerEvent);
         recentEvents.put(player.getName(), System.currentTimeMillis() + delay);

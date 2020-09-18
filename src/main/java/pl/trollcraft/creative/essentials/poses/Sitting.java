@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -22,30 +23,22 @@ public class Sitting implements Listener {
 
     private static HashMap<Player, Entity> sitting = new HashMap<>();
 
-    @EventHandler
-    public void onInteract (DoubleInteractEvent event) {
+    public static void sit(Player player, Block block) {
+        Location loc = block.getLocation();
 
-        //FIXME add sitting on blocks (right now it is a bit bugged, when sitting on stairs - ok)
+        Entity entity;
+        if (block.getType().name().contains("STAIRS"))
+            entity = loc.getWorld().spawnEntity(loc.add(0.5, -0.15, 0.5), EntityType.ARROW);
+        else
+            entity = loc.getWorld().spawnEntity(loc.add(0.5, 0.15, 0.5), EntityType.ARROW);
 
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            Player player = event.getPlayer();
-            Location loc = event.getBlock().getLocation();
+        entity.addPassenger(player);
+        hideEntity(player, entity);
 
-            Entity entity = loc.getWorld().spawnEntity(loc.add(0.5, -0.15, 0.5), EntityType.ARROW);
-            entity.addPassenger(player);
-            hideEntity(player, entity);
-
-            sitting.put(player, entity);
-        }
-
+        sitting.put(player, entity);
     }
 
-    @EventHandler
-    public void onDismount (final EntityDismountEvent event) {
-
-        if (event.getEntityType() != EntityType.PLAYER) return;
-
-        Player player = (Player) event.getEntity();
+    public static void standUp(Player player, Entity entity) {
 
         if (sitting.containsKey(player)) {
             sitting.get(player).remove();
@@ -55,7 +48,7 @@ public class Sitting implements Listener {
 
                 @Override
                 public void run() {
-                    event.getDismounted().remove();
+                    entity.remove();
                 }
 
             }.runTaskLater(Creative.getPlugin(), 20);
@@ -63,7 +56,7 @@ public class Sitting implements Listener {
 
     }
 
-    private void hideEntity(Player sees, Entity entity) {
+    private static void hideEntity(Player sees, Entity entity) {
 
         PacketContainer container = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
 

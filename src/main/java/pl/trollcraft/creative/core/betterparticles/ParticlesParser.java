@@ -5,7 +5,7 @@ import org.bukkit.Particle;
 /**
  * String - Particles parser
  */
-public class ParticlesParser {
+public final class ParticlesParser {
 
     /**
      * Parses string into particles object.

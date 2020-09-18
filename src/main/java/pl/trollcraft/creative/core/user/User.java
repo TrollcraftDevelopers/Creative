@@ -1,5 +1,6 @@
 package pl.trollcraft.creative.core.user;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,22 @@ public class User {
         components.add(component);
     }
 
+    @Nullable
+    public<T extends UserComponent> T findComponent(String componentName) {
+
+        Optional<UserComponent> opt = components.stream()
+                .filter( comp -> comp.getName().equals(componentName) )
+                .findAny();
+
+        UserComponent comp = opt.orElse(null);
+
+        if (comp == null) return null;
+        else
+            return (T) comp;
+
+    }
+
+    @Deprecated
     public UserComponent getComponent(String componentName) {
         Optional<UserComponent> opt = components.stream()
                 .filter( comp -> comp.getName().equals(componentName) )

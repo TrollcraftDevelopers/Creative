@@ -17,7 +17,9 @@ public class WorldEditCommandsController extends Controller<WorldEditCommand, St
 
             ArrayList<Argument> args = new ArrayList<>();
             conf.getConfigurationSection("worldedit." + command + ".arguments").getKeys(false).forEach( ordStr ->
-                args.add(new Argument(Integer.parseInt(ordStr), conf.getString("worldedit." + command + ".arguments." + ordStr + ".forbidden").split(",")))
+                args.add(new Argument(
+                        Integer.parseInt(ordStr),
+                        conf.getString("worldedit." + command + ".arguments." + ordStr + ".forbidden").split(",")))
             );
 
             GroupValues<Selection> maxSelections = new GroupValues<>();

@@ -22,7 +22,7 @@ public class GamemodeCommand extends CommandController {
         if (args.length == 0) {
             player.sendMessage("&7Uzycie: &e/gamemode 0 - tryb przetrwania,");
             player.sendMessage("&7Uzycie: &e/gamemode 1 - tryb kreatywny,");
-            player.sendMessage("&7Uzycie: &e/gamemode 2 - tryb przygody,");
+            player.sendMessage("&7Uzycie: &e/gamemode 2 - tryb przygodowy,");
             player.sendMessage("&7Uzycie: &e/gamemode 3 - tryb obserwatora.");
             return;
         }

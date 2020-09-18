@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
+import pl.trollcraft.creative.core.help.Help;
 import pl.trollcraft.creative.core.help.chatcreator.ChatCreator;
 import pl.trollcraft.creative.core.help.chatcreator.Rule;
 
@@ -49,7 +50,7 @@ public class PlayerEventsCommand extends CommandController {
                 long time = controller.canOrganize(player);
                 if (time > 0) {
                     player.sendMessage(Colors.color("&cKolejny event bedziesz mogl zorganizowac " +
-                            "za &e" + (time / 1000 / 60) + " minut."));
+                            "za &e" + Help.parseTime(time) + "."));
                     return;
                 }
 
@@ -61,8 +62,10 @@ public class PlayerEventsCommand extends CommandController {
                 Rule rule = chatCreator.createRule(player);
                 rule.setCancelsEvent(true);
                 rule.setTask(message -> {
-                    if (message.equalsIgnoreCase("anuluj"))
+                    if (message.equalsIgnoreCase("anuluj")) {
+                        player.sendMessage(Colors.color("&7Anulowano tworzenie event'u."));
                         return;
+                    }
 
                     controller.organize(player, message);
                     player.sendMessage(Colors.color("&aEvent zostal utworzony!\n&ePotrwa 5 minut."));

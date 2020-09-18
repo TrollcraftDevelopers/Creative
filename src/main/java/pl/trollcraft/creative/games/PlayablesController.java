@@ -6,8 +6,7 @@ import pl.trollcraft.creative.core.controlling.Controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Deprecated
-public class AttractionsController extends Controller<Attraction, String> {
+public class PlayablesController extends Controller<Playable, String> {
 
     /**
      * Finds an attraction by name.
@@ -16,9 +15,9 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @return attraction
      */
     @Override
-    public Attraction find(String name) {
+    public Playable find(String name) {
         return instances.stream()
-                .filter( attraction -> attraction.equals(name) )
+                .filter( p -> p.getName().equals(name) )
                 .findFirst()
                 .orElse(null);
     }
@@ -30,10 +29,10 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @param name
      * @return attraction
      */
-    public Attraction find(String name, String type) {
+    public Playable find(String name, String type) {
         return instances.stream()
-                .filter( attraction -> attraction.equals(name) )
-                .filter( attraction -> attraction.getType().equals(type))
+                .filter( p -> p.getName().equals(name) )
+                .filter( p -> p.getType().equals(type))
                 .findFirst()
                 .orElse(null);
     }
@@ -45,10 +44,10 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @param player
      * @return attraction
      */
-    public Attraction find(Player player, String type) {
+    public Playable find(Player player, String type) {
         return instances.stream()
-                .filter( attraction -> attraction.getParticipants().contains(player) )
-                .filter( attraction -> attraction.getType().equals(type) )
+                .filter( p -> p.getParticipants().contains(player) )
+                .filter( p -> p.getType().equals(type) )
                 .findFirst()
                 .orElse(null);
     }
@@ -60,9 +59,9 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @param player
      * @return attraction
      */
-    public Attraction find(Player player) {
+    public Playable find(Player player) {
         return instances.stream()
-                .filter( attraction -> attraction.getParticipants().contains(player) )
+                .filter( p -> p.getParticipants().contains(player) )
                 .findFirst()
                 .orElse(null);
     }
@@ -74,10 +73,10 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @param player
      * @return
      */
-    public List<Attraction> findAll(Player player, String type) {
+    public List<Playable> findAll(Player player, String type) {
         return instances.stream()
-                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
-                .filter( attraction -> attraction.getType().equals(type) )
+                .filter( p -> p.getCreator().equals(player.getName()) )
+                .filter( p -> p.getType().equals(type) )
                 .collect(Collectors.toList());
     }
 
@@ -85,12 +84,12 @@ public class AttractionsController extends Controller<Attraction, String> {
      * Finds all attractions created
      * by the player.
      *
-     * @param player
-     * @return
+     * @param player a name of creator.
+     * @return list of games
      */
-    public List<Attraction> findAll(Player player) {
+    public List<Playable> findAll(String player) {
         return instances.stream()
-                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
+                .filter( p -> p.getCreator().equals(player) )
                 .collect(Collectors.toList());
     }
 
@@ -101,11 +100,11 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @param player
      * @return attraction
      */
-    public Attraction findConserved(Player player, String type) {
+    public Playable findConserved(Player player, String type) {
         return instances.stream()
-                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
-                .filter( attraction -> attraction.isConserved())
-                .filter( attraction -> attraction.getType().equals(type) )
+                .filter( p -> p.getCreator().equals(player.getName()) )
+                .filter(Playable::isConserved)
+                .filter( p -> p.getType().equals(type) )
                 .findFirst()
                 .orElse(null);
     }
@@ -117,10 +116,10 @@ public class AttractionsController extends Controller<Attraction, String> {
      * @param player
      * @return attraction
      */
-    public Attraction findConserved(Player player) {
+    public Playable findConserved(Player player) {
         return instances.stream()
-                .filter( attraction -> attraction.getCreator().equals(player.getName()) )
-                .filter( attraction -> attraction.isConserved())
+                .filter( p -> p.getCreator().equals(player.getName()) )
+                .filter(Playable::isConserved)
                 .findFirst()
                 .orElse(null);
     }

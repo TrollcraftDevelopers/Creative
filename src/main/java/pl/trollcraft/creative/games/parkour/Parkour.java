@@ -1,6 +1,5 @@
 package pl.trollcraft.creative.games.parkour;
 
-import com.google.common.collect.Lists;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -132,6 +131,7 @@ public class Parkour extends Attraction {
         DetectionRequest endRequest = new DetectionRequest(TYPENAME, player, endBlock, req -> {
             leave(player);
 
+            finished();
             player.sendMessage(Colors.color("&a&lGRATULACJE!\n&aUkonczyles parkour &e" + getName() + "!"));
         }, false);
 
@@ -256,4 +256,17 @@ public class Parkour extends Attraction {
         return super.equals(obj);
 
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(Colors.color("&aInformacje o grze: &e" + getName() + "\n"));
+        builder.append(Colors.color("&aTworca: &e" + getCreator() + "\n"));
+        builder.append(Colors.color("&aTyp: &e" + getType() + "\n"));
+        builder.append(Colors.color("&aObecnie gra: &e" + getParticipants().size() + " graczy,\n"));
+        builder.append(Colors.color("&aZagralo: &e" + getPlayedBy() + " graczy,\n"));
+        builder.append(Colors.color("&aUkonczylo: &e" + getFinishedBy() + " graczy,\n"));
+        return builder.toString();
+    }
+
 }

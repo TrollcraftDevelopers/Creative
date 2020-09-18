@@ -8,10 +8,20 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.help.Help;
 
+import java.util.HashMap;
+
+//TODO make signs more complex!
+//TODO make signs more complex!
+//TODO make signs more complex!
 public class MoneySignListener implements Listener {
+
+    private static final long MONEY_SIGN_COOLDOWN = 1000*60*5;
+
+    private HashMap<String, Long> limits = new HashMap<>();
 
     @EventHandler
     public void onInteract (PlayerInteractEvent event) {
@@ -26,16 +36,32 @@ public class MoneySignListener implements Listener {
 
             if (lines[0].equals(Colors.color("&2&l[PRZEKAZ]"))) {
 
-                Player player = Bukkit.getPlayer(lines[2]);
-                double money = Double.parseDouble(lines[3].substring(0, lines[3].length() - 2));
-
-                if (player.getEntityId() == event.getPlayer().getEntityId())
+                if (lines[2].equals(event.getPlayer().getName()))
                     return;
 
-                event.getPlayer().sendMessage(Colors.color("&aPrzekazales &e" + money + " TC &agraczowi &e" + player.getName() + "."));
+                if (!canUseMoneySign(event.getPlayer())) {
+                    event.getPlayer().sendMessage(Colors.color("&cZnakow mozna uzywac co &e5 minut."));
+                    return;
+                }
 
-                if (player != null)
-                    player.sendMessage("&e" + event.getPlayer().getName() + " &aprzekazal Ci &e" + money + " TC.");
+                String playerName = lines[2];
+                Player player = Bukkit.getPlayer(playerName);
+
+                if (player == null || !player.isOnline()){
+                    event.getPlayer().sendMessage(Colors.color("&cGracz jest offline. Z powodu bezpieczenstwa, transakcja odrzucona."));
+                    return;
+                }
+
+                double money = Double.parseDouble(lines[3].substring(0, lines[3].length() - 2));
+
+                Creative.getPlugin().getEconomy().withdrawPlayer(player, money);
+                Creative.getPlugin().getEconomy().depositPlayer(event.getPlayer(), money);
+
+                limits.put(event.getPlayer().getName(), System.currentTimeMillis() + MONEY_SIGN_COOLDOWN);
+
+                player.sendMessage(Colors.color("&7Przekazano &e" + money + " TC. &7graczowi &e" + event.getPlayer().getName() + " (Tabliczka)"));
+                event.getPlayer().sendMessage(Colors.color("&aOtrzymano &e" + money + " TC.&a od &e" + lines[2]));
+
 
             }
 
@@ -59,6 +85,18 @@ public class MoneySignListener implements Listener {
             player.sendMessage(Colors.color("&aTabliczka przekazu TC zostala utworzona."));
 
         }
+
+    }
+
+
+
+    private boolean canUseMoneySign(Player player) {
+
+        String name = player.getName();
+        if (!limits.containsKey(name))
+            return true;
+
+        return System.currentTimeMillis() >= limits.get(name);
 
     }
 

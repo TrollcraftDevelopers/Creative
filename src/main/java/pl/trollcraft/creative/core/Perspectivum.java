@@ -29,7 +29,6 @@ public class Perspectivum extends JavaPlugin {
     public void init() {}
     public void dependencies() {}
 
-    @Deprecated
     public void data() {}
 
     public void managers() {}
@@ -86,7 +85,7 @@ public class Perspectivum extends JavaPlugin {
      * It should be registered in managers
      * lifecycle function.
      *
-     * @param manager - manager to be registered.
+     * @param manager a manager to be registered.
      * @throws IllegalStateException if manager is already registered.
      */
     public void registerPersistenceManager(PersistenceManager manager) {
@@ -106,12 +105,12 @@ public class Perspectivum extends JavaPlugin {
         init();
         dependencies();
 
-        data();
-
         controllers();
-        managers();
 
+        data();
         loadData();
+
+        managers();
 
         commands();
         events();
