@@ -14,8 +14,8 @@ public class InstantTeleportController extends CommandController {
     public void command(CommandSender sender, String label, String[] args) {
 
         Player player = (Player) sender;
-
-        if (!player.hasPermission("creative.admin")) {
+    // Changed so it is different permission.
+        if (!player.hasPermission("creative.tp")) {
             player.sendMessage(Colors.color("&cBrak uprawnien."));
             return;
         }

@@ -3,14 +3,20 @@ package pl.trollcraft.creative.essentials.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.trollcraft.creative.Creative;
+import pl.trollcraft.creative.essentials.homes.Home;
 
 public class PlayerEventsListener implements Listener {
 
     private static PlayerEventsController controller
             = Creative.getPlugin().getPlayerEventsController();
 
+    @EventHandler
+    public void onJoin (PlayerJoinEvent e){
+        Home.load(e.getPlayer());
+    }
     @EventHandler
     public void onQuit (PlayerQuitEvent event) {
 

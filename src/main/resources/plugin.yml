@@ -86,3 +86,24 @@ commands:
   response:
     description: Responses to recent messages.
     aliases: [r]
+
+  home:
+    description: Home system. Teleports player to home if created.
+    aliases: [dom]
+
+  sethome:
+    description: Creates new home for the player.
+    aliases: [newhome]
+
+  delhome:
+    description: Deletes selected home.
+    aliases: [removehome]
+
+  warp:
+    description: Teleports to the warp.
+
+  setwarp:
+    description: Creates new warp.
+
+  delwarp:
+    description: Deletes selected warp.

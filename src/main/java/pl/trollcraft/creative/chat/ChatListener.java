@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import pl.trollcraft.creative.Creative;
 
 public class ChatListener implements Listener {
@@ -27,10 +28,15 @@ public class ChatListener implements Listener {
 
         event.setFormat(format);
     }
-
+    //Added quit and join messages.
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         ChatProfile.load(event.getPlayer());
+        event.setJoinMessage("");
+    }
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        event.setQuitMessage("");
     }
 
 }
