@@ -19,13 +19,13 @@ import pl.trollcraft.creative.chat.commands.ResponseCommand;
 import pl.trollcraft.creative.chat.config.ChatConfig;
 import pl.trollcraft.creative.core.commands.CommandsManager;
 import pl.trollcraft.creative.core.Perspectivum;
-import pl.trollcraft.creative.core.controlling.Controller;
+import pl.trollcraft.creative.core.controller.Controller;
+import pl.trollcraft.creative.core.events.DoubleClickHandler;
 import pl.trollcraft.creative.core.gui.GUIManager;
 import pl.trollcraft.creative.core.gui.InventoryListener;
 import pl.trollcraft.creative.core.help.WorldLoader;
 import pl.trollcraft.creative.core.help.blocksdetector.BlockDetector;
 import pl.trollcraft.creative.core.help.chatcreator.ChatCreator;
-import pl.trollcraft.creative.core.help.demands.DemandsController;
 import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
@@ -33,27 +33,22 @@ import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
 import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
-import pl.trollcraft.creative.essentials.money.MoneySignListener;
-import pl.trollcraft.creative.essentials.money.ScheduledMoneyManager;
-import pl.trollcraft.creative.essentials.poses.SitCommand;
-import pl.trollcraft.creative.essentials.poses.SittingListener;
+import pl.trollcraft.creative.essentials.homes.DelHomeCommand;
+import pl.trollcraft.creative.essentials.homes.HomeCommand;
+import pl.trollcraft.creative.essentials.homes.SetHomeCommand;
+import pl.trollcraft.creative.essentials.moneysigns.MoneySignListener;
 import pl.trollcraft.creative.essentials.redstone.RedstoneSignSignalizer;
 import pl.trollcraft.creative.essentials.redstone.SignalsCommand;
 import pl.trollcraft.creative.essentials.redstone.signals.SignalsController;
 import pl.trollcraft.creative.essentials.spawn.SetSpawnCommand;
 import pl.trollcraft.creative.essentials.spawn.SpawnCommand;
-import pl.trollcraft.creative.essentials.teleport.InstantTeleportCommand;
-import pl.trollcraft.creative.essentials.teleport.TeleportHereCommand;
-import pl.trollcraft.creative.essentials.teleport.demanded.AcceptTeleportCommand;
-import pl.trollcraft.creative.essentials.teleport.demanded.DemandedTeleportCommand;
-import pl.trollcraft.creative.essentials.teleport.demanded.RefuseTeleportCommand;
+import pl.trollcraft.creative.essentials.warps.DelWarpCommand;
+import pl.trollcraft.creative.essentials.warps.SetWarpCommand;
+import pl.trollcraft.creative.essentials.warps.Warp;
+import pl.trollcraft.creative.essentials.warps.WarpCommand;
 import pl.trollcraft.creative.games.AttractionsController;
 import pl.trollcraft.creative.games.AttractionsListener;
-import pl.trollcraft.creative.games.GamesCommand;
-import pl.trollcraft.creative.games.PlayablesController;
-import pl.trollcraft.creative.games.parkour.Parkour;
 import pl.trollcraft.creative.games.parkour.ParkourCommand;
-import pl.trollcraft.creative.games.parkour.ParkourPersistenceManager;
 import pl.trollcraft.creative.plots.PlotManagerCommand;
 import pl.trollcraft.creative.plots.PlotsListener;
 import pl.trollcraft.creative.plots.metadata.PlotsMetaDataController;
@@ -77,7 +72,7 @@ import pl.trollcraft.creative.safety.worldedit.WorldEditListener;
 import pl.trollcraft.creative.services.items.SpecialEnchantmentRegister;
 import pl.trollcraft.creative.services.items.SpecialItemsController;
 import pl.trollcraft.creative.services.items.SpecialItemsListener;
-import pl.trollcraft.creative.services.pets.*;
+import pl.trollcraft.creative.services.pets.PetsCommand;
 import pl.trollcraft.creative.services.tails.Tail;
 import pl.trollcraft.creative.services.tails.TailsCommand;
 import pl.trollcraft.creative.services.tails.TailsComponent;
@@ -86,6 +81,9 @@ import pl.trollcraft.creative.services.vehicles.VehiclesCommand;
 import pl.trollcraft.creative.services.vehicles.VehiclesComponent;
 import pl.trollcraft.creative.services.vehicles.VehiclesController;
 import pl.trollcraft.creative.shops.ShopCommand;
+import pl.trollcraft.creative.essentials.commands.AcceptTeleportController;
+import pl.trollcraft.creative.essentials.commands.AcceptedTeleportController;
+import pl.trollcraft.creative.essentials.commands.InstantTeleportController;
 import pl.trollcraft.creative.essentials.commands.naming.LoreItemController;
 import pl.trollcraft.creative.essentials.commands.naming.RenameItemController;
 import pl.trollcraft.creative.shops.ShopManager;
@@ -105,7 +103,6 @@ public final class Creative extends Perspectivum {
     private ShopManager shopManager;
     private ChatConfig chatConfig;
 
-    private DemandsController demandsController;
     private SafetyProviderController safetyProviderController;
     private UserComponentsController componentsController;
     private UsersController userController;
@@ -120,14 +117,8 @@ public final class Creative extends Perspectivum {
     private BlocksController blocksController;
     private WorldEditCommandsController worldEditCommandsController;
     private PrefixesController prefixesController;
-
     private AttractionsController attractionsController;
-    private PlayablesController playablesController;
-
     private Controller<ShopSession, Player> shopSessionsController;
-    private Controller<Parkour, String> parkoursController;
-    private PetsController petsController;
-    private PetSessionsController petSessionsController;
 
     private ChatCreator chatCreator;
 
@@ -152,17 +143,10 @@ public final class Creative extends Perspectivum {
     public void data() {
         AutoMessages.init();
         TailsManager.load();
+        Warp.load();
 
         chatConfig = new ChatConfig();
         chatConfig.load();
-
-        PetsPersistenceManager petsPersistenceManager = PetsPersistenceManager.newInstance();
-        petsPersistenceManager.setShouldSave(false);
-        registerPersistenceManager(petsPersistenceManager);
-
-        ParkourPersistenceManager parkourPersistenceManager = ParkourPersistenceManager.newInstance(parkoursController);
-        parkourPersistenceManager.setWaitTimeBeforeLoad(30);
-        registerPersistenceManager(parkourPersistenceManager);
     }
 
     @Override
@@ -174,9 +158,7 @@ public final class Creative extends Perspectivum {
         componentsController.register(VehiclesComponent.COMP_NAME, VehiclesComponent.class);
         componentsController.register(PrefixesComponent.COMP_NAME, PrefixesComponent.class);
         componentsController.register(WorldEditComponent.COMP_NAME, WorldEditComponent.class);
-        componentsController.register(PetsComponent.COMP_NAME, PetsComponent.class);
 
-        demandsController = new DemandsController();
         userController = new UsersController();
         signalsController = new SignalsController();
         vehiclesController = new VehiclesController();
@@ -190,14 +172,8 @@ public final class Creative extends Perspectivum {
         blocksController = new BlocksController();
         worldEditCommandsController = new WorldEditCommandsController();
         prefixesController = new PrefixesController();
-
         attractionsController = new AttractionsController();
-        playablesController = new PlayablesController();
-
         shopSessionsController = new Controller<>();
-        parkoursController = new Controller<>();
-        petsController = new PetsController();
-        petSessionsController = new PetSessionsController();
 
         chatBlockadesController.load();
         vehiclesController.load();
@@ -205,6 +181,11 @@ public final class Creative extends Perspectivum {
         limitsController.load();
         worldEditCommandsController.load();
         prefixesController.load();
+    }
+
+    @Override
+    public void onLoad() {
+        //CustomMobs.mobs();
     }
 
     @Override
@@ -221,22 +202,15 @@ public final class Creative extends Perspectivum {
 
         Tail.enable();
 
+        new DoubleClickHandler(this);
         SpecialItemsListener.listen();
-
-        ScheduledMoneyManager.init();
     }
 
     @Override
     public void commands() {
-        commandsManager.bind("spawn", SpawnCommand.class);
-        commandsManager.bind("setspawn", SetSpawnCommand.class);
-
-        commandsManager.bind("teleport", InstantTeleportCommand.class);
-        commandsManager.bind("tphere", TeleportHereCommand.class);
-        commandsManager.bind("tpa", DemandedTeleportCommand.class);
-        commandsManager.bind("tpaccept", AcceptTeleportCommand.class);
-        commandsManager.bind("tpdeny", RefuseTeleportCommand.class);
-
+        commandsManager.bind("teleport", InstantTeleportController.class);
+        commandsManager.bind("tpa", AcceptedTeleportController.class);
+        commandsManager.bind("tpaccept", AcceptTeleportController.class);
         commandsManager.bind("rename", RenameItemController.class);
         commandsManager.bind("lore", LoreItemController.class);
         commandsManager.bind("shop", ShopCommand.class);
@@ -250,13 +224,20 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("wed", WorldEditDebugCommand.class);
         commandsManager.bind("prefixes", PrefixesCommand.class);
         commandsManager.bind("parkour", ParkourCommand.class);
-        commandsManager.bind("gry", GamesCommand.class);
         commandsManager.bind("pet", PetsCommand.class);
+        commandsManager.bind("spawn", SpawnCommand.class);
+        commandsManager.bind("setspawn", SetSpawnCommand.class);
         commandsManager.bind("chat", ChatCommand.class);
         commandsManager.bind("broadcast", BroadcastCommand.class);
         commandsManager.bind("message", MessageCommand.class);
         commandsManager.bind("response", ResponseCommand.class);
-        commandsManager.bind("sit", SitCommand.class);
+        commandsManager.bind("home", HomeCommand.class);
+        commandsManager.bind("sethome", SetHomeCommand.class);
+        commandsManager.bind("delhome", DelHomeCommand.class);
+        commandsManager.bind("warp", WarpCommand.class);
+        commandsManager.bind("setwarp", SetWarpCommand.class);
+        commandsManager.bind("delwarp", DelWarpCommand.class);
+
     }
 
     @Override
@@ -273,8 +254,6 @@ public final class Creative extends Perspectivum {
         getServer().getPluginManager().registerEvents(new WorldEditListener(), this);
         getServer().getPluginManager().registerEvents(new PrefixesListener(), this);
         getServer().getPluginManager().registerEvents(new AttractionsListener(), this);
-        getServer().getPluginManager().registerEvents(new PetsListener(), this);
-        getServer().getPluginManager().registerEvents(new SittingListener(), this);
         getServer().getPluginManager().registerEvents(new PlotsListener(), this);
         getServer().getPluginManager().registerEvents(chatCreator, this);
 
@@ -284,11 +263,6 @@ public final class Creative extends Perspectivum {
 
     // --------
 
-    /**
-     * Loads Vault economy environment.
-     *
-     * @return boolean status of Vault loading.
-     */
     private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
@@ -329,10 +303,6 @@ public final class Creative extends Perspectivum {
 
     public ShopManager getShopManager() {
         return shopManager;
-    }
-
-    public DemandsController getDemandsController() {
-        return demandsController;
     }
 
     public UsersController getUserController() {
@@ -379,7 +349,7 @@ public final class Creative extends Perspectivum {
         return blockadeActionsController;
     }
 
-    public LimitsController getLimitsController() {
+    public Controller<Limit, Material> getLimitsController() {
         return limitsController;
     }
 
@@ -405,20 +375,6 @@ public final class Creative extends Perspectivum {
 
     public SafetyProviderController getSafetyProviderController() {
         return safetyProviderController;
-    }
-
-    public Controller<Parkour, String> getParkoursController() { return parkoursController; }
-
-    public PetsController getPetsController() {
-        return petsController;
-    }
-
-    public PetSessionsController getPetSessionsController() {
-        return petSessionsController;
-    }
-
-    public PlayablesController getPlayablesController() {
-        return playablesController;
     }
 }
 
