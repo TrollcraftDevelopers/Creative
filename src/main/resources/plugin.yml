@@ -4,16 +4,21 @@ main: pl.trollcraft.creative.Creative
 api-version: 1.13
 author: SkepsonSk
 description: A creative server manager plugin.
-depends: [PlaceholderAPI]
+depends: [PlaceholderAPI, PlotSquared, Multiverse-Core]
 
 commands:
+
   teleport:
     description: A teleport command.
     aliases: [tp]
+  tphere:
+    description: Teleports target to the sender.
   tpa:
     description: An accepted teleport command.
   tpaccept:
-    description: A teleport command.
+    description: Accepts a teleport demand.
+  tpdeny:
+    description: Refuses a teleport demand.
     aliases: [tp]
 
   rename:
@@ -87,23 +92,30 @@ commands:
     description: Responses to recent messages.
     aliases: [r]
 
+  sit:
+    description: Makes the player sit.
+    aliases: [usiadz, siadz]
+
+  gry:
+    description: Games command.
+    aliases: [games, gra, game]
   home:
     description: Home system. Teleports player to home if created.
-    aliases: [dom]
+    aliases: [ dom ]
 
-  sethome:
-    description: Creates new home for the player.
-    aliases: [newhome]
+    sethome:
+      description: Creates new home for the player.
+      aliases: [ newhome ]
 
-  delhome:
-    description: Deletes selected home.
-    aliases: [removehome]
+    delhome:
+      description: Deletes selected home.
+      aliases: [ removehome ]
 
-  warp:
-    description: Teleports to the warp.
+    warp:
+      description: Teleports to the warp.
 
-  setwarp:
-    description: Creates new warp.
+    setwarp:
+      description: Creates new warp.
 
-  delwarp:
-    description: Deletes selected warp.
+    delwarp:
+      description: Deletes selected warp.
