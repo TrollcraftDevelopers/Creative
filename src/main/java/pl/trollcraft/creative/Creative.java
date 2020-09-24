@@ -29,6 +29,7 @@ import pl.trollcraft.creative.core.help.demands.DemandsController;
 import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
+import pl.trollcraft.creative.essentials.adminchat.AdminChatCommand;
 import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
@@ -270,6 +271,7 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("warp", WarpCommand.class);
         commandsManager.bind("setwarp", SetWarpCommand.class);
         commandsManager.bind("delwarp", DelWarpCommand.class);
+        commandsManager.bind("adminchat", AdminChatCommand.class);
     }
 
     @Override

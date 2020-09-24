@@ -35,6 +35,7 @@ public class PetSelectView {
         PetsComponent petsComponent = user.findComponent(PetsComponent.COMP_NAME);
 
         int slot = 0;
+        System.out.println("Liczba zakupionych: " + petsComponent.getPets().size());
         for (String petName : petsComponent.getPets()) {
 
             Pet pet = Creative.getPlugin()

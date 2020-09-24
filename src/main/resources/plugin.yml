@@ -103,19 +103,23 @@ commands:
     description: Home system. Teleports player to home if created.
     aliases: [ dom ]
 
-    sethome:
-      description: Creates new home for the player.
-      aliases: [ newhome ]
+  sethome:
+    description: Creates new home for the player.
+    aliases: [ newhome ]
 
-    delhome:
-      description: Deletes selected home.
-      aliases: [ removehome ]
+  delhome:
+    description: Deletes selected home.
+    aliases: [ removehome ]
 
-    warp:
-      description: Teleports to the warp.
+  warp:
+    description: Teleports to the warp.
 
-    setwarp:
-      description: Creates new warp.
+  setwarp:
+    description: Creates new warp.
 
-    delwarp:
-      description: Deletes selected warp.
+  delwarp:
+    description: Deletes selected warp.
+
+  adminchat:
+    description: Chat for admins
+    aliases: [achat, ac]

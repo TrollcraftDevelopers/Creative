@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
-import pl.trollcraft.creative.essentials.teleport.InstantTeleport;
+import pl.trollcraft.creative.essentials.teleport.obj.InstantTeleport;
 
 public class InstantTeleportController extends CommandController {
 
