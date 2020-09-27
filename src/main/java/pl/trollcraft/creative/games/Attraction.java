@@ -2,6 +2,7 @@ package pl.trollcraft.creative.games;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.help.Colors;
 
 import java.util.HashSet;
@@ -218,6 +219,14 @@ public abstract class Attraction implements Playable {
 
     public void finished() {
         finishedBy++;
+    }
+
+    @Override
+    public void delete() {
+        getParticipants().forEach(this::leave);
+
+        Creative.getPlugin().getAttractionsController().unregister(this);
+        Creative.getPlugin().getPlayablesController().unregister(this);
     }
 
     /**

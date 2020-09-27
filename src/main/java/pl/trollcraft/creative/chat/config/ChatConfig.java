@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import pl.trollcraft.creative.core.Configs;
+import pl.trollcraft.creative.core.help.Colors;
 
 import java.util.Stack;
 import java.util.logging.Level;
@@ -53,7 +54,7 @@ public class ChatConfig {
             }
         }
 
-        return chatFormat.toString();
+        return Colors.color(chatFormat.toString());
 
     }
 

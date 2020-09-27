@@ -3,7 +3,6 @@ package pl.trollcraft.creative;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import pl.trollcraft.creative.chat.AutoMessages;
@@ -29,7 +28,10 @@ import pl.trollcraft.creative.core.help.demands.DemandsController;
 import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
+import pl.trollcraft.creative.essentials.colors.ColorsListener;
 import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
+import pl.trollcraft.creative.essentials.commands.RideEntityCommand;
+import pl.trollcraft.creative.essentials.commands.naming.RenamePlayerCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
 import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
@@ -64,7 +66,6 @@ import pl.trollcraft.creative.prefixes.obj.PrefixesController;
 import pl.trollcraft.creative.prefixes.obj.PrefixesListener;
 import pl.trollcraft.creative.safety.blocks.BlocksController;
 import pl.trollcraft.creative.safety.blocks.BlocksListener;
-import pl.trollcraft.creative.safety.blocks.Limit;
 import pl.trollcraft.creative.safety.blocks.LimitsController;
 import pl.trollcraft.creative.safety.leaks.SafetyCommand;
 import pl.trollcraft.creative.safety.leaks.SafetyListener;
@@ -239,6 +240,9 @@ public final class Creative extends Perspectivum {
 
         commandsManager.bind("rename", RenameItemController.class);
         commandsManager.bind("lore", LoreItemController.class);
+        commandsManager.bind("nick", RenamePlayerCommand.class);
+        commandsManager.bind("jazda", RideEntityCommand.class);
+
         commandsManager.bind("shop", ShopCommand.class);
         commandsManager.bind("tails", TailsCommand.class);
         commandsManager.bind("vehicles", VehiclesCommand.class);
@@ -268,6 +272,7 @@ public final class Creative extends Perspectivum {
         getServer().getPluginManager().registerEvents(new MoneySignListener(), this);
         getServer().getPluginManager().registerEvents(new SafetyListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerEventsListener(), this);
+        getServer().getPluginManager().registerEvents(new ColorsListener(), this);
         getServer().getPluginManager().registerEvents(new ChatBlockadesListener(), this);
         getServer().getPluginManager().registerEvents(new BlocksListener(), this);
         getServer().getPluginManager().registerEvents(new WorldEditListener(), this);

@@ -9,6 +9,7 @@ import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.help.blocksdetector.BlockDetector;
 import pl.trollcraft.creative.core.help.blocksdetector.DetectionRequest;
+import pl.trollcraft.creative.games.Playable;
 import pl.trollcraft.creative.games.PlayablesController;
 import pl.trollcraft.creative.games.Result;
 
@@ -30,10 +31,13 @@ public class ParkourCommand extends CommandController {
         if (args.length == 0) {
             player.sendMessage(Colors.color("&aParkoury - tworzenie:"));
             player.sendMessage(Colors.color("&e/parkour nowy <nazwa> - &7tworzy nowy parkour,"));
+            player.sendMessage(Colors.color("&e/parkour edytuj <nazwa> - &7edytuje parkour,"));
+            player.sendMessage("");
             player.sendMessage(Colors.color("&e/parkour lokacja start - &7okresla poczatek parkour'u,"));
             player.sendMessage(Colors.color("&e/parkour blok spadek - &7tworzy blok spadku,"));
             player.sendMessage(Colors.color("&e/parkour blok checkpoint - &7tworzy blok checkpoint'u,"));
             player.sendMessage(Colors.color("&e/parkour blok koniec - &7tworzy blok zakonczenia parkour'u,"));
+            player.sendMessage("");
             player.sendMessage(Colors.color("&e/parkour opublikuj - &7sprawdza i uruchamia parkour."));
             return;
         }
@@ -74,7 +78,29 @@ public class ParkourCommand extends CommandController {
             player.sendMessage(Colors.color("&aParkour zostal utworzony. Teraz nalezy go skonfigurowac.\n" +
                     "&7Gdy zakonczysz konfiguracje - uzyj komendy /parkour opublikuj."));
 
-            return;
+        }
+        else if (args[0].equalsIgnoreCase("edytuj")) {
+
+            if (args.length != 2) {
+                player.sendMessage(Colors.color("&eUzycie: &7/parkour edytuj <nazwa>"));
+                return;
+            }
+
+            String parkourName = args[1];
+            Playable playable = Creative.getPlugin().getPlayablesController().find(parkourName);
+
+            if (playable == null) {
+                player.sendMessage(Colors.color("&cParkour o podanej nazwie nie istnieje."));
+                return;
+            }
+
+            if (!playable.getCreator().equals(player.getName())){
+                player.sendMessage(Colors.color("&cNie jestes tworca tego parkour'a."));
+                return;
+            }
+
+            playable.setConserved(true);
+            player.sendMessage(Colors.color("&7Przelaczono parkour w tryb edycji."));
 
         }
         else if (args[0].equalsIgnoreCase("lokacja")) {

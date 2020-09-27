@@ -27,6 +27,10 @@ commands:
   lore:
     description: Changes lore of an item.
     aliases: [opis]
+  nick:
+    description: Changes player name.
+  jazda:
+    description: Ride a mob.
 
   shop:
     description: Displays the shop.
