@@ -35,20 +35,34 @@ import pl.trollcraft.creative.essentials.commands.naming.RenamePlayerCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
 import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
+<<<<<<< HEAD
 import pl.trollcraft.creative.essentials.money.MoneySignListener;
 import pl.trollcraft.creative.essentials.money.ScheduledMoneyManager;
 import pl.trollcraft.creative.essentials.poses.SitCommand;
 import pl.trollcraft.creative.essentials.poses.SittingListener;
+=======
+import pl.trollcraft.creative.essentials.homes.DelHomeCommand;
+import pl.trollcraft.creative.essentials.homes.HomeCommand;
+import pl.trollcraft.creative.essentials.homes.SetHomeCommand;
+import pl.trollcraft.creative.essentials.moneysigns.MoneySignListener;
+>>>>>>> 1a941e13b657e91ec69c9adfae28f6abd66eb7cf
 import pl.trollcraft.creative.essentials.redstone.RedstoneSignSignalizer;
 import pl.trollcraft.creative.essentials.redstone.SignalsCommand;
 import pl.trollcraft.creative.essentials.redstone.signals.SignalsController;
 import pl.trollcraft.creative.essentials.spawn.SetSpawnCommand;
 import pl.trollcraft.creative.essentials.spawn.SpawnCommand;
+<<<<<<< HEAD
 import pl.trollcraft.creative.essentials.teleport.InstantTeleportCommand;
 import pl.trollcraft.creative.essentials.teleport.TeleportHereCommand;
 import pl.trollcraft.creative.essentials.teleport.demanded.AcceptTeleportCommand;
 import pl.trollcraft.creative.essentials.teleport.demanded.DemandedTeleportCommand;
 import pl.trollcraft.creative.essentials.teleport.demanded.RefuseTeleportCommand;
+=======
+import pl.trollcraft.creative.essentials.warps.DelWarpCommand;
+import pl.trollcraft.creative.essentials.warps.SetWarpCommand;
+import pl.trollcraft.creative.essentials.warps.Warp;
+import pl.trollcraft.creative.essentials.warps.WarpCommand;
+>>>>>>> 1a941e13b657e91ec69c9adfae28f6abd66eb7cf
 import pl.trollcraft.creative.games.AttractionsController;
 import pl.trollcraft.creative.games.AttractionsListener;
 import pl.trollcraft.creative.games.GamesCommand;
@@ -153,6 +167,7 @@ public final class Creative extends Perspectivum {
     public void data() {
         AutoMessages.init();
         TailsManager.load();
+        Warp.load();
 
         chatConfig = new ChatConfig();
         chatConfig.load();
@@ -260,7 +275,17 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("broadcast", BroadcastCommand.class);
         commandsManager.bind("message", MessageCommand.class);
         commandsManager.bind("response", ResponseCommand.class);
+<<<<<<< HEAD
         commandsManager.bind("sit", SitCommand.class);
+=======
+        commandsManager.bind("home", HomeCommand.class);
+        commandsManager.bind("sethome", SetHomeCommand.class);
+        commandsManager.bind("delhome", DelHomeCommand.class);
+        commandsManager.bind("warp", WarpCommand.class);
+        commandsManager.bind("setwarp", SetWarpCommand.class);
+        commandsManager.bind("delwarp", DelWarpCommand.class);
+
+>>>>>>> 1a941e13b657e91ec69c9adfae28f6abd66eb7cf
     }
 
     @Override

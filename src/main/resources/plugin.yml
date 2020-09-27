@@ -96,6 +96,7 @@ commands:
     description: Responses to recent messages.
     aliases: [r]
 
+<<<<<<< HEAD
   sit:
     description: Makes the player sit.
     aliases: [usiadz, siadz]
@@ -103,3 +104,25 @@ commands:
   gry:
     description: Games command.
     aliases: [games, gra, game]
+=======
+  home:
+    description: Home system. Teleports player to home if created.
+    aliases: [dom]
+
+  sethome:
+    description: Creates new home for the player.
+    aliases: [newhome]
+
+  delhome:
+    description: Deletes selected home.
+    aliases: [removehome]
+
+  warp:
+    description: Teleports to the warp.
+
+  setwarp:
+    description: Creates new warp.
+
+  delwarp:
+    description: Deletes selected warp.
+>>>>>>> 1a941e13b657e91ec69c9adfae28f6abd66eb7cf
