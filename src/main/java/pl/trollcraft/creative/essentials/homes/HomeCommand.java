@@ -7,12 +7,14 @@ import pl.trollcraft.creative.core.Configs;
 import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
 
+import java.util.List;
 import java.util.Objects;
 
 public class HomeCommand extends CommandController {
 
     @Override
     public void command(CommandSender sender, String label, String[] args) {
+
         if (!(sender instanceof Player)) {
             sender.sendMessage("Komenda jedynie dla graczy online.");
             return;

@@ -27,5 +27,6 @@ public class DelHomeCommand extends CommandController {
             }
         }
         player.sendMessage(Colors.color("&c Nie ma takiego home."));
+
     }
 }

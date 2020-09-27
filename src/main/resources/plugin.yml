@@ -96,7 +96,7 @@ commands:
     description: Responses to recent messages.
     aliases: [r]
 
-<<<<<<< HEAD
+
   sit:
     description: Makes the player sit.
     aliases: [usiadz, siadz]
@@ -104,7 +104,6 @@ commands:
   gry:
     description: Games command.
     aliases: [games, gra, game]
-=======
   home:
     description: Home system. Teleports player to home if created.
     aliases: [dom]
@@ -125,4 +124,19 @@ commands:
 
   delwarp:
     description: Deletes selected warp.
->>>>>>> 1a941e13b657e91ec69c9adfae28f6abd66eb7cf
+
+  adminchat:
+    description: Chat for admins
+    aliases: [achat, ac]
+
+  openinventory:
+    description: Command to open inventory of other players
+    aliases: [oi]
+
+  openenderchest:
+    description: Command to open enderchests of other players
+    aliases: [oe]
+
+  hat:
+    description: Wear what ever you want on your head
+

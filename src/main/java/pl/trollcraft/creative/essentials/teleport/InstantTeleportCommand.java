@@ -17,8 +17,8 @@ public class InstantTeleportCommand extends CommandController {
             return;
         }
 
-        if (!sender.hasPermission("creative.admin")){
-            sender.sendMessage(Colors.color("&cKomenda jedynie dla administracji."));
+        if (!sender.hasPermission("creative.tp")){
+            sender.sendMessage(Colors.color("&cBrak uprawnien"));
             return;
         }
 
@@ -50,8 +50,11 @@ public class InstantTeleportCommand extends CommandController {
 
                 break;
 
-            case 2:
-
+            case 2: // Permisja tpto zeby gracze sie nawzajem nie tepali do siebie.
+                if (!sender.hasPermission("creative.tpto")){
+                    sender.sendMessage(Colors.color("&cBrak uprawnien"));
+                    return;
+                }
                 String whoName = args[0];
                 String toName = args[1];
 

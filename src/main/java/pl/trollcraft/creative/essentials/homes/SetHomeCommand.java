@@ -17,27 +17,26 @@ public class SetHomeCommand extends CommandController {
             return;
         }
         Player player = (Player) sender;
-        if (args.length > 2) {
-            player.sendMessage(Colors.color("&cZa dużo argumentów."));
+
+        if(args.length == 0){
+            Home.addHome(player, "default");
+            sender.sendMessage(Colors.color("&aUtworzono dom"));
             return;
         }
-        int homes = (int) new GroupValues<Integer>().add("Creative.mvip", 10).add("Creative.svip", 5).add("Creative.vip", 2).resolve(player);
-        for (Home home : Objects.requireNonNull(Home.gethomes(player))) {
-            if (Objects.requireNonNull(Home.gethomes(player)).size() >= homes) {
-                player.sendMessage(Colors.color("&3 Nie mozesz miec wiecej domow"));
-                return;
-            }
-            if (args[0].equalsIgnoreCase(home.getName())) {
-                player.sendMessage(Colors.color("&3Dom o takiej nazwie już istnieje"));
-                return;
-            }
-        }
-        if (args.length == 0) {
-            Home.save(player, "default");
-            player.sendMessage(Colors.color("&1Utworzono dom"));
+
+        int homes = (int) new GroupValues<Integer>().add("Creative.mvip", 10).add("Creative.svip", 5).add("Creative.vip", 2).add("Creative.player", 1).resolve(player);
+
+        if(Home.getHomesAmount(player) >= homes){
+            sender.sendMessage(Colors.color("Osiagnales maksymalna liczbe home'ow"));
             return;
         }
-        Home.save(player, args[0]);
-        player.sendMessage(Colors.color("&1Utworzono dom o nazwie" + args[0]));
+
+        if(args.length == 1){
+            Home.addHome(player, args[0]);
+            sender.sendMessage(Colors.color("&aUtworzono dom o nazwie " + args[0]));
+            return;
+        }
+
+        sender.sendMessage(Colors.color("&7/" + label + " <nazwa>"));
     }
 }
