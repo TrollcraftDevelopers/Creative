@@ -123,3 +123,14 @@ commands:
   adminchat:
     description: Chat for admins
     aliases: [achat, ac]
+
+  openinventory:
+    description: Command to open inventory of other players
+    aliases: [oi]
+
+  openenderchest:
+    description: Command to open enderchests of other players
+    aliases: [oe]
+
+  hat:
+    description: Wear what ever you want on your head

@@ -3,7 +3,6 @@ package pl.trollcraft.creative;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import pl.trollcraft.creative.chat.AutoMessages;
@@ -30,7 +29,10 @@ import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
 import pl.trollcraft.creative.essentials.adminchat.AdminChatCommand;
+import pl.trollcraft.creative.essentials.commands.OpenEnderchestCommand;
 import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
+import pl.trollcraft.creative.essentials.commands.HatCommand;
+import pl.trollcraft.creative.essentials.commands.OpenInventoryCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
 import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
@@ -72,7 +74,6 @@ import pl.trollcraft.creative.prefixes.obj.PrefixesController;
 import pl.trollcraft.creative.prefixes.obj.PrefixesListener;
 import pl.trollcraft.creative.safety.blocks.BlocksController;
 import pl.trollcraft.creative.safety.blocks.BlocksListener;
-import pl.trollcraft.creative.safety.blocks.Limit;
 import pl.trollcraft.creative.safety.blocks.LimitsController;
 import pl.trollcraft.creative.safety.leaks.SafetyCommand;
 import pl.trollcraft.creative.safety.leaks.SafetyListener;
@@ -272,6 +273,9 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("setwarp", SetWarpCommand.class);
         commandsManager.bind("delwarp", DelWarpCommand.class);
         commandsManager.bind("adminchat", AdminChatCommand.class);
+        commandsManager.bind("openinventory", OpenInventoryCommand.class);
+        commandsManager.bind("openenderchest", OpenEnderchestCommand.class);
+        commandsManager.bind("hat", HatCommand.class);
     }
 
     @Override
