@@ -39,10 +39,21 @@ import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
 import pl.trollcraft.creative.essentials.homes.DelHomeCommand;
 import pl.trollcraft.creative.essentials.homes.HomeCommand;
 import pl.trollcraft.creative.essentials.homes.SetHomeCommand;
+import pl.trollcraft.creative.essentials.colors.ColorsListener;
+import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
+import pl.trollcraft.creative.essentials.commands.RideEntityCommand;
+import pl.trollcraft.creative.essentials.commands.naming.RenamePlayerCommand;
+import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
+import pl.trollcraft.creative.essentials.events.PlayerEventsController;
+import pl.trollcraft.creative.essentials.events.PlayerEventsListener;
 import pl.trollcraft.creative.essentials.money.MoneySignListener;
 import pl.trollcraft.creative.essentials.money.ScheduledMoneyManager;
 import pl.trollcraft.creative.essentials.poses.SitCommand;
 import pl.trollcraft.creative.essentials.poses.SittingListener;
+import pl.trollcraft.creative.essentials.homes.DelHomeCommand;
+import pl.trollcraft.creative.essentials.homes.HomeCommand;
+import pl.trollcraft.creative.essentials.homes.SetHomeCommand;
+import pl.trollcraft.creative.essentials.moneysigns.MoneySignListener;
 import pl.trollcraft.creative.essentials.redstone.RedstoneSignSignalizer;
 import pl.trollcraft.creative.essentials.redstone.SignalsCommand;
 import pl.trollcraft.creative.essentials.redstone.signals.SignalsController;
@@ -162,6 +173,7 @@ public final class Creative extends Perspectivum {
         AutoMessages.init();
         TailsManager.load();
         Warp.load();
+      
         chatConfig = new ChatConfig();
         chatConfig.load();
 
@@ -248,6 +260,9 @@ public final class Creative extends Perspectivum {
 
         commandsManager.bind("rename", RenameItemController.class);
         commandsManager.bind("lore", LoreItemController.class);
+        commandsManager.bind("nick", RenamePlayerCommand.class);
+        commandsManager.bind("jazda", RideEntityCommand.class);
+
         commandsManager.bind("shop", ShopCommand.class);
         commandsManager.bind("tails", TailsCommand.class);
         commandsManager.bind("vehicles", VehiclesCommand.class);
@@ -276,6 +291,7 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("openinventory", OpenInventoryCommand.class);
         commandsManager.bind("openenderchest", OpenEnderchestCommand.class);
         commandsManager.bind("hat", HatCommand.class);
+
     }
 
     @Override
@@ -287,6 +303,7 @@ public final class Creative extends Perspectivum {
         getServer().getPluginManager().registerEvents(new MoneySignListener(), this);
         getServer().getPluginManager().registerEvents(new SafetyListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerEventsListener(), this);
+        getServer().getPluginManager().registerEvents(new ColorsListener(), this);
         getServer().getPluginManager().registerEvents(new ChatBlockadesListener(), this);
         getServer().getPluginManager().registerEvents(new BlocksListener(), this);
         getServer().getPluginManager().registerEvents(new WorldEditListener(), this);

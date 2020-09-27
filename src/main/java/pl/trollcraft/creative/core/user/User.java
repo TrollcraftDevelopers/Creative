@@ -38,6 +38,10 @@ public class User {
 
     }
 
+    public boolean hasComponent(String componentName) {
+        return components.stream().anyMatch(comp -> comp.getName().equals(componentName));
+    }
+
     @Deprecated
     public UserComponent getComponent(String componentName) {
         Optional<UserComponent> opt = components.stream()

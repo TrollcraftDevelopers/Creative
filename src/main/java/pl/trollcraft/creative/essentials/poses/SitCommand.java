@@ -1,9 +1,11 @@
 package pl.trollcraft.creative.essentials.poses;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pl.trollcraft.creative.core.commands.CommandController;
+import pl.trollcraft.creative.core.help.Colors;
 
 public class SitCommand extends CommandController {
 
@@ -18,7 +20,11 @@ public class SitCommand extends CommandController {
         Player player = (Player) sender;
 
         Block target = player.getTargetBlock(null, 5);
-        Sitting.sit(player, target);
+
+        if (target.getType() == Material.AIR)
+            player.sendMessage(Colors.color("&cNie mozesz usiasc na tym bloku."));
+        else
+            Sitting.sit(player, target);
         
     }
 

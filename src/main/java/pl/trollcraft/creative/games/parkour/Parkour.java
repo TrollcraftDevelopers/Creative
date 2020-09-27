@@ -259,14 +259,12 @@ public class Parkour extends Attraction {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append(Colors.color("&aInformacje o grze: &e" + getName() + "\n"));
-        builder.append(Colors.color("&aTworca: &e" + getCreator() + "\n"));
-        builder.append(Colors.color("&aTyp: &e" + getType() + "\n"));
-        builder.append(Colors.color("&aObecnie gra: &e" + getParticipants().size() + " graczy,\n"));
-        builder.append(Colors.color("&aZagralo: &e" + getPlayedBy() + " graczy,\n"));
-        builder.append(Colors.color("&aUkonczylo: &e" + getFinishedBy() + " graczy,\n"));
-        return builder.toString();
+        return Colors.color("&aInformacje o grze: &e" + getName() + "\n") +
+                Colors.color("&aTworca: &e" + getCreator() + "\n") +
+                Colors.color("&aTyp: &e" + getType() + "\n") +
+                Colors.color("&aObecnie gra: &e" + getParticipants().size() + " graczy,\n") +
+                Colors.color("&aZagralo: &e" + getPlayedBy() + " graczy,\n") +
+                Colors.color("&aUkonczylo: &e" + getFinishedBy() + " graczy,\n");
     }
 
 }

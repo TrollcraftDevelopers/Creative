@@ -55,6 +55,36 @@ public class Home {
         for(Home home : homes.get(player.getName())){
             if(home.getName().equalsIgnoreCase(name)){
                 return home;
+
+    /**
+     * List of all homes
+     */
+    public static Map<String, List<Home>> homes = new HashMap<>();
+    /**
+     *  Function to get a single home from target player and target name.
+     * @return Home h if home exists or null if home doesn't not exist
+     */
+    public static Home gethome(Player p, String home) {
+        for(Map.Entry<String, List<Home>> entry : homes.entrySet()){
+            if (entry.getKey().equals(p.getName())){
+                for (Home h : entry.getValue()){
+                    if(h.getName().equals(home)){
+                        return h;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     *  Function to get a list  of homes from target player and target name.
+     * @return Homes if homes exists or null if homes doesn't not exist
+     */
+    public static List<Home> gethomes(Player p) {
+        for (Map.Entry<String, List<Home>> entry : homes.entrySet()) {
+            if (entry.getKey().equals(p.getName())) {
+                return entry.getValue();
+
             }
         }
         return null;
@@ -89,6 +119,22 @@ public class Home {
         else{
             return 0;
         }
+
+    private String name;
+    private Location location;
+
+    /**
+     * Constructor of the home object
+     * @param name name of the home in String
+     * @param section section of the configuration
+     */
+    public Home(String name, ConfigurationSection section){
+        this.name = name;
+        World w = Bukkit.getWorld(section.getString("World"));
+        double x = section.getDouble("x");
+        double y = section.getDouble("y");
+        double z = section.getDouble("z");
+        this.location = new Location(w,x,y,z);
     }
 
     public static void save(Player player, String name) {
@@ -110,6 +156,9 @@ public class Home {
                 double z = conf.getDouble("homes." + player.getName() + "." + s + ".x");
                 String world = conf.getString("homes." + player.getName() + "." + s + ".World");
                 Home home = new Home(s, new Location(Bukkit.getWorld(world),x, y, z));
+
+                Home home = new Home(s, Objects.requireNonNull(conf.getConfigurationSection("homes." + player.getName() + "." + s)));
+
                 list.add(home);
             }
             homes.put(player.getName(),list);
@@ -128,6 +177,7 @@ public class Home {
 
     }
 
+
     public String getName() {
         return name;
     }
@@ -143,6 +193,14 @@ public class Home {
     public void setLocation(Location location) {
         this.location = location;
     }
+
+    public String getName(){
+        return name;
+    }
+    public Location getLocation(){
+        return location;
+    }
+
 }
 
 

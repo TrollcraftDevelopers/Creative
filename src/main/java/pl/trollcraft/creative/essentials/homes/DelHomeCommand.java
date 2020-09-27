@@ -10,37 +10,23 @@ import java.util.Objects;
 public class DelHomeCommand extends CommandController {
     @Override
     public void command(CommandSender sender, String label, String[] args) {
-
-        if(!(sender instanceof Player)){
-            sender.sendMessage("Komenda tylko dla graczy");
-        }
-
-        Player player = (Player) sender;
-
-        if(args.length == 1){
-            String name = args[0];
-
-            if(name.equalsIgnoreCase("default")){
-                sender.sendMessage(Colors.color("&cNie mozesz tego zrobic!"));
-                return;
-            }
-
-            if(!Home.doesPlayerHasHomes(player)){
-                sender.sendMessage(Colors.color("Nie posiadasz home'ow!"));
-                return;
-            }
-
-            if(!Home.doesHomeExist(player, name)){
-                sender.sendMessage(Colors.color("&cTen home nie istnieje!"));
-                return;
-            }
-
-            Home home = Home.getHomeByName(player, name);
-            home.delHome(player, name);
-            sender.sendMessage(Colors.color("&cUsunieto home o nazwie " + name));
+        if (!(sender instanceof Player)) {
+            sender.sendMessage("Komenda jedynie dla graczy online.");
             return;
         }
+        Player player = (Player) sender;
+        if (args.length > 2) {
+            player.sendMessage(Colors.color("&cZa dużo argumentów."));
+            return;
+        }
+        for (Home home : Objects.requireNonNull(Home.gethomes(player))) {
+            if (args[0].equalsIgnoreCase(home.getName())) {
+                home.delete(player);
+                player.sendMessage(Colors.color("&cUsunieto home."));
+                return;
+            }
+        }
+        player.sendMessage(Colors.color("&c Nie ma takiego home."));
 
-        sender.sendMessage(Colors.color("&7/" + label + " <nazwa>"));
     }
 }

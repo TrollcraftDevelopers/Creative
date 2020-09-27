@@ -27,6 +27,10 @@ commands:
   lore:
     description: Changes lore of an item.
     aliases: [opis]
+  nick:
+    description: Changes player name.
+  jazda:
+    description: Ride a mob.
 
   shop:
     description: Displays the shop.
@@ -92,6 +96,7 @@ commands:
     description: Responses to recent messages.
     aliases: [r]
 
+
   sit:
     description: Makes the player sit.
     aliases: [usiadz, siadz]
@@ -101,15 +106,15 @@ commands:
     aliases: [games, gra, game]
   home:
     description: Home system. Teleports player to home if created.
-    aliases: [ dom ]
+    aliases: [dom]
 
   sethome:
     description: Creates new home for the player.
-    aliases: [ newhome ]
+    aliases: [newhome]
 
   delhome:
     description: Deletes selected home.
-    aliases: [ removehome ]
+    aliases: [removehome]
 
   warp:
     description: Teleports to the warp.
@@ -134,3 +139,4 @@ commands:
 
   hat:
     description: Wear what ever you want on your head
+

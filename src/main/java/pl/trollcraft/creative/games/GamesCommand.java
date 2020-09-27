@@ -29,12 +29,14 @@ public class GamesCommand extends CommandController {
             player.sendMessage(Colors.color("&aWitaj w systemie gier i atrakcji Creative TC!"));
             player.sendMessage(Colors.color("&aTworz niesamowite gry i udostepniaj je innym graczom!"));
             player.sendMessage("");
-            player.sendMessage(Colors.color("&e/gry dolacz <nazwa> &7- dolacz do gry o danej nazwie,"));
-            player.sendMessage(Colors.color("&e/gry opusc &7- opuszcza aktualna gre,"));
+            player.sendMessage(Colors.color("&e/gra dolacz <nazwa> &7- dolacz do gry o danej nazwie,"));
+            player.sendMessage(Colors.color("&e/gra opusc &7- opuszcza aktualna gre,"));
             player.sendMessage("");
-            player.sendMessage(Colors.color("&e/gry info <nazwa> &7- informacje o grze,"));
-            player.sendMessage(Colors.color("&e/gry <gracz> &7- gry danego gracza."));
+            player.sendMessage(Colors.color("&e/gra info <nazwa> &7- informacje o grze,"));
+            player.sendMessage(Colors.color("&e/gra <gracz> &7- gry danego gracza."));
             player.sendMessage("");
+            player.sendMessage(Colors.color("&e/gra usun <nazwa> &7- usuwa gre."));
+
             //TODO player.sendMessage(Colors.color("&e/gry tworzenie &7- informacje odnosnie tworzenia gier."));
         }
 
@@ -67,8 +69,6 @@ public class GamesCommand extends CommandController {
                 }
 
                 player.sendMessage(Colors.color("&aDolaczono do gry."));
-                return;
-
             }
             else if (args[0].equalsIgnoreCase("opusc")) {
 
@@ -101,7 +101,30 @@ public class GamesCommand extends CommandController {
 
                 player.sendMessage(playable.toString());
 
-                return;
+            }
+            else if (args[0].equalsIgnoreCase("usun")) {
+
+                if (args.length != 2) {
+                    player.sendMessage(Colors.color("&eUzycie: &7/gra usun <nazwa>"));
+                    return;
+                }
+
+                String playableName = args[1];
+                Playable playable =
+                        Creative.getPlugin().getPlayablesController().find(playableName);
+
+                if (playable == null){
+                    player.sendMessage(Colors.color("&cGra nie istnieje."));
+                    return;
+                }
+
+                if (!playable.getCreator().equals(player.getName())){
+                    player.sendMessage(Colors.color("&cNie jestes tworca tej gry."));
+                    return;
+                }
+
+                playable.delete();
+                player.sendMessage(Colors.color("&7Gra zostala usnieta."));
 
             }
             else {
@@ -117,8 +140,6 @@ public class GamesCommand extends CommandController {
                 player.sendMessage(Colors.color("&aGry stworzone przez &e" + creatorName + ":"));
                 player.sendMessage("");
                 list.forEach( playable -> player.sendMessage(Colors.color("&a- " + playable.getName() + ", typ: " + playable.getType())) );
-
-                return;
 
             }
 

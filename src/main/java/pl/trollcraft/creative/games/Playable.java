@@ -23,5 +23,8 @@ public interface Playable {
     int getFinishedBy();
 
     boolean isConserved();
+    void setConserved(boolean conserved);
+
+    void delete();
 
 }
