@@ -11,29 +11,29 @@ import pl.trollcraft.creative.core.help.Colors;
 
 public class AttractionsListener implements Listener {
 
-    private AttractionsController attractionsController
-            = Creative.getPlugin().getAttractionsController();
+    private PlayablesController playablesController
+            = Creative.getPlugin().getPlayablesController();
 
     @EventHandler
     public void onQuit (PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        Attraction attraction = attractionsController.find(player);
+        Playable playable = playablesController.find(player);
 
-        if (attraction != null)
-            attraction.leave(player);
+        if (playable != null)
+            playable.leave(player);
     }
 
     @EventHandler
     public void onGameModeChange (PlayerGameModeChangeEvent event) {
 
         Player player = event.getPlayer();
-        Attraction attraction = attractionsController.find(player);
+        Playable playable = playablesController.find(player);
 
-        if (attraction != null) {
+        if (playable != null) {
 
             GameMode gameMode = event.getNewGameMode();
 
-            if (!attraction.getGameModesAllowed().contains(gameMode)) {
+            if (!playable.getGameModesAllowed().contains(gameMode)) {
                 event.setCancelled(true);
                 player.sendMessage(Colors.color("&cTa gra nie zezwala na ten tryb gry!"));
             }

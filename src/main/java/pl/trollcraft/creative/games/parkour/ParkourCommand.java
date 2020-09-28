@@ -141,6 +141,11 @@ public class ParkourCommand extends CommandController {
             String type = args[1];
             ItemStack hand = player.getInventory().getItemInMainHand();
 
+            if (hand.getType() == Material.AIR) {
+                player.sendMessage(Colors.color("&cZly blok!"));
+                return;
+            }
+            
             if (type.equalsIgnoreCase("spadek")) {
                 parkour.setFallBlock(hand.getType());
                 player.sendMessage(Colors.color("&aUstawiono blok spadku."));
@@ -155,6 +160,9 @@ public class ParkourCommand extends CommandController {
                 parkour.setEndBlock(hand.getType());
                 player.sendMessage(Colors.color("&aUstawiono blok konca parkour'a."));
             }
+
+            else
+                player.sendMessage(Colors.color("&cNieznany typ bloku."));
 
             return;
 

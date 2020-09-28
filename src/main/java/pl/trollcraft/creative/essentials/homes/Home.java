@@ -51,15 +51,15 @@ public class Home {
         delete(player);
     }
 
-    public static Home getHomeByName(Player player, String name){
-        for(Home home : homes.get(player.getName())){
-            if(home.getName().equalsIgnoreCase(name)){
+    public static Home getHomeByName(Player player, String name) {
+        for (Home home : homes.get(player.getName())) {
+            if (home.getName().equalsIgnoreCase(name)) {
                 return home;
+            }
+        }
+        return null;
+    }
 
-    /**
-     * List of all homes
-     */
-    public static Map<String, List<Home>> homes = new HashMap<>();
     /**
      *  Function to get a single home from target player and target name.
      * @return Home h if home exists or null if home doesn't not exist
@@ -112,16 +112,13 @@ public class Home {
         return false;
     }
 
-    public static int getHomesAmount(Player player){
-        if(homes.containsKey(player.getName())){
+    public static int getHomesAmount(Player player) {
+        if (homes.containsKey(player.getName())) {
             return homes.get(player.getName()).size();
-        }
-        else{
+        } else {
             return 0;
         }
-
-    private String name;
-    private Location location;
+    }
 
     /**
      * Constructor of the home object
@@ -146,6 +143,8 @@ public class Home {
         conf.set( key + ".z", player.getLocation().getZ());
         Configs.save(conf,"homes.yml");
     }
+
+
     public static void load(Player player){
         YamlConfiguration conf = Configs.load("homes.yml");
         List<Home> list = new ArrayList<>();
@@ -155,7 +154,6 @@ public class Home {
                 double y = conf.getDouble("homes." + player.getName() + "." + s + ".x");
                 double z = conf.getDouble("homes." + player.getName() + "." + s + ".x");
                 String world = conf.getString("homes." + player.getName() + "." + s + ".World");
-                Home home = new Home(s, new Location(Bukkit.getWorld(world),x, y, z));
 
                 Home home = new Home(s, Objects.requireNonNull(conf.getConfigurationSection("homes." + player.getName() + "." + s)));
 
@@ -177,17 +175,8 @@ public class Home {
 
     }
 
-
-    public String getName() {
-        return name;
-    }
-
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Location getLocation() {
-        return location;
     }
 
     public void setLocation(Location location) {

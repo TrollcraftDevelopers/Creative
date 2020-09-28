@@ -87,14 +87,14 @@ public class WorldEditComponent implements UserComponent {
     }
 
     @Override
-    public void save(YamlConfiguration conf, String path, Player player) {
+    public void save(YamlConfiguration conf, String path) {
         conf.set(path, null);
         for (Cooldown cooldown : cooldowns)
             conf.set(String.format("%s.%s.until", path, cooldown.command.getName()), cooldown.until);
     }
 
     @Override
-    public void load(YamlConfiguration conf, String path, Player player) {
+    public void load(YamlConfiguration conf, String path) {
         conf.getConfigurationSection(path).getKeys(false).forEach( command -> {
 
             long until = conf.getLong(String.format("%s.%s.until", path, command));

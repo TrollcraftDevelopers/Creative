@@ -1,23 +1,16 @@
 package pl.trollcraft.creative.essentials.poses;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.events.PacketContainer;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.spigotmc.event.entity.EntityDismountEvent;
 import pl.trollcraft.creative.Creative;
-import pl.trollcraft.creative.core.events.DoubleInteractEvent;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Sitting implements Listener {
 
@@ -27,14 +20,12 @@ public class Sitting implements Listener {
         Location loc = block.getLocation();
 
         Entity entity;
-        if (block.getType().name().contains("STAIRS"))
-            entity = loc.getWorld().spawnEntity(loc.add(0.5, -0.15, 0.5), EntityType.ARROW);
+        if (block.getType().name().contains("STAIRS") || block.getType().name().contains("SLAB"))
+            entity = Objects.requireNonNull(loc.getWorld()).spawnEntity(loc.add(.5, -0.15, .5), EntityType.ARROW);
         else
-            entity = loc.getWorld().spawnEntity(loc.add(0.5, 0.15, 0.5), EntityType.ARROW);
+            entity = Objects.requireNonNull(loc.getWorld()).spawnEntity(loc.add(.5, .5, .5), EntityType.ARROW);
 
         entity.addPassenger(player);
-        hideEntity(player, entity);
-
         sitting.put(player, entity);
     }
 
@@ -53,28 +44,6 @@ public class Sitting implements Listener {
 
             }.runTaskLater(Creative.getPlugin(), 20);
         }
-
-    }
-
-    private static void hideEntity(Player sees, Entity entity) {
-
-        PacketContainer container = new PacketContainer(PacketType.Play.Server.ENTITY_DESTROY);
-
-        container.getIntegerArrays().write(0, new int[] { entity.getEntityId() } );
-
-        int id = sees.getEntityId();
-        Bukkit.getOnlinePlayers().forEach( player -> {
-
-            if (player.getEntityId() == id) return;
-
-            try {
-
-                Creative.getPlugin().getProtocolManager().sendServerPacket(player, container);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-
-        });
 
     }
 

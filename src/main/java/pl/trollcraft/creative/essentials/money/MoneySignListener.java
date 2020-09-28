@@ -2,6 +2,7 @@ package pl.trollcraft.creative.essentials.money;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,6 +14,7 @@ import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.help.Help;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 //TODO make signs more complex!
 //TODO make signs more complex!
@@ -36,6 +38,8 @@ public class MoneySignListener implements Listener {
 
             if (lines[0].equals(Colors.color("&2&l[PRZEKAZ]"))) {
 
+                if (lines[2].isEmpty() || lines[3].isEmpty()) return;
+
                 if (lines[2].equals(event.getPlayer().getName()))
                     return;
 
@@ -45,12 +49,7 @@ public class MoneySignListener implements Listener {
                 }
 
                 String playerName = lines[2];
-                Player player = Bukkit.getPlayer(playerName);
-
-                if (player == null || !player.isOnline()){
-                    event.getPlayer().sendMessage(Colors.color("&cGracz jest offline. Z powodu bezpieczenstwa, transakcja odrzucona."));
-                    return;
-                }
+                OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
 
                 double money = Double.parseDouble(lines[3].substring(0, lines[3].length() - 2));
 
@@ -59,7 +58,6 @@ public class MoneySignListener implements Listener {
 
                 limits.put(event.getPlayer().getName(), System.currentTimeMillis() + MONEY_SIGN_COOLDOWN);
 
-                player.sendMessage(Colors.color("&7Przekazano &e" + money + " TC. &7graczowi &e" + event.getPlayer().getName() + " (Tabliczka)"));
                 event.getPlayer().sendMessage(Colors.color("&aOtrzymano &e" + money + " TC.&a od &e" + lines[2]));
 
 
@@ -74,6 +72,9 @@ public class MoneySignListener implements Listener {
 
         if (event.getLine(0).equalsIgnoreCase("TC")) {
 
+            if (Objects.requireNonNull(event.getLine(1)).isEmpty())
+                return;
+
             Player player = event.getPlayer();
             double money = Double.parseDouble(event.getLine(1));
 
@@ -87,8 +88,6 @@ public class MoneySignListener implements Listener {
         }
 
     }
-
-
 
     private boolean canUseMoneySign(Player player) {
 

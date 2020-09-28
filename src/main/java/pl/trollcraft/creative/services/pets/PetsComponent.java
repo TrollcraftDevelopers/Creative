@@ -35,12 +35,12 @@ public class PetsComponent implements UserComponent {
     }
 
     @Override
-    public void save(YamlConfiguration conf, String path, Player player) {
+    public void save(YamlConfiguration conf, String path) {
         conf.set(path + ".pets", pets);
     }
 
     @Override
-    public void load(YamlConfiguration conf, String path, Player player) {
+    public void load(YamlConfiguration conf, String path) {
         pets = conf.getStringList(path + ".pets");
     }
 
