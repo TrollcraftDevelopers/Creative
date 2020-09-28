@@ -25,7 +25,7 @@ public class SitCommand extends CommandController {
             player.sendMessage(Colors.color("&cNie mozesz usiasc na tym bloku."));
         else
             Sitting.sit(player, target);
-        
+
     }
 
 }

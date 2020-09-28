@@ -8,6 +8,7 @@ import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.Configs;
 import pl.trollcraft.creative.core.controlling.Controller;
 
+import javax.annotation.Nullable;
 import java.util.logging.Level;
 
 public class UsersController extends Controller<User, String> {
@@ -17,12 +18,11 @@ public class UsersController extends Controller<User, String> {
 
     public void save(User user) {
         YamlConfiguration conf = Configs.load("users.yml");
-        Player player = Bukkit.getPlayer(user.getName());
 
         user.getComponents().forEach( comp -> {
 
             if (!comp.isEmpty())
-                comp.save(conf, String.format("users.%s.%s", user.getName(), comp.getName()), player);
+                comp.save(conf, String.format("users.%s.%s", user.getName(), comp.getName()));
 
         }  );
 
@@ -37,14 +37,16 @@ public class UsersController extends Controller<User, String> {
         User user = new User(name);
         register(user);
 
+        assert conf != null;
         if (conf.contains(String.format("users.%s", name))){
 
             ConfigurationSection components
                     = conf.getConfigurationSection(String.format("users.%s", name));
 
-            components.getKeys(false).forEach( compName -> {
+            assert components != null;
+            components.getKeys(false).forEach(compName -> {
 
-                Class clazz = componentsController.getComponentClass(compName);
+                Class<? extends UserComponent> clazz = componentsController.getComponentClass(compName);
                 UserComponent component = null;
 
                 if (clazz == null) {
@@ -54,15 +56,14 @@ public class UsersController extends Controller<User, String> {
 
                 try {
 
-                    component = (UserComponent) clazz.newInstance();
+                    component = clazz.newInstance();
 
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                } catch (InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
 
-                component.load(conf, String.format("users.%s.%s", name, compName), player);
+                assert component != null;
+                component.load(conf, String.format("users.%s.%s", name, compName));
 
                 user.addComponent(component);
             } );
@@ -71,6 +72,37 @@ public class UsersController extends Controller<User, String> {
 
         return user;
 
+    }
+
+    @Nullable
+    public <T extends UserComponent> T loadComponent(String componentName, String userName) {
+
+        YamlConfiguration conf = Configs.load("users.yml");
+
+        assert conf != null;
+        if (!conf.contains("users." + userName)) return null;
+        if (!conf.contains("users." + userName + "." + componentName)) return null;
+
+        Class<? extends UserComponent> clazz = componentsController.getComponentClass(componentName);
+        UserComponent component = null;
+
+        if (clazz == null) {
+            Bukkit.getLogger().log(Level.WARNING, "No such class: " + componentName);
+            return null;
+        }
+
+        try {
+
+            component = clazz.newInstance();
+
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        assert component != null;
+        component.load(conf, String.format("users.%s.%s", userName, componentName));
+
+        return (T) component;
     }
 
 }

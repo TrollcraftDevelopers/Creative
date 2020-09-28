@@ -40,13 +40,13 @@ public class PrefixesComponent implements UserComponent {
     }
 
     @Override
-    public void save(YamlConfiguration conf, String path, Player player) {
+    public void save(YamlConfiguration conf, String path) {
         conf.set(path + ".current", current);
         conf.set(path + ".prefixes", prefixes);
     }
 
     @Override
-    public void load(YamlConfiguration conf, String path, Player player) {
+    public void load(YamlConfiguration conf, String path) {
         current = conf.getString(path + ".current");
         prefixes = conf.getStringList(path + ".prefixes");
     }

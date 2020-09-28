@@ -37,13 +37,13 @@ public class VehiclesComponent implements UserComponent {
     }
 
     @Override
-    public void save(YamlConfiguration conf, String path, Player player) {
+    public void save(YamlConfiguration conf, String path) {
         if (!isEmpty())
             conf.set(String.format("%s.vehiclesAvailable", path), vehiclesAvailable);
     }
 
     @Override
-    public void load(YamlConfiguration conf, String path, Player player) {
+    public void load(YamlConfiguration conf, String path) {
         if (conf.contains(String.format("%s.vehiclesAvailable", path)))
             vehiclesAvailable = conf.getStringList(String.format("%s.vehiclesAvailable", path));
     }

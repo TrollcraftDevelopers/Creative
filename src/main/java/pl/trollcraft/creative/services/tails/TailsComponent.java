@@ -48,7 +48,7 @@ public class TailsComponent implements UserComponent {
     }
 
     @Override
-    public void save(YamlConfiguration conf, String path, Player player) {
+    public void save(YamlConfiguration conf, String path) {
         if (tailsAvailable.isEmpty()) return;
 
         conf.set(String.format("%s.selectedTail", path), selectedTail);
@@ -56,7 +56,7 @@ public class TailsComponent implements UserComponent {
     }
 
     @Override
-    public void load(YamlConfiguration conf, String path, Player player) {
+    public void load(YamlConfiguration conf, String path) {
         Bukkit.getLogger().log(Level.INFO, "Loading tails component...");
 
         if (conf.contains(String.format("%s.tailsAvailable", path)))

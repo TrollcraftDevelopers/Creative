@@ -41,7 +41,7 @@ public class RideEntityCommand extends CommandController {
                     .findFirst()
                     .orElse(null);
 
-            if (entity != null) {
+            if (entity != null && entity.getEntityId() != player.getEntityId()) {
                 entity.addPassenger(player);
                 player.sendMessage(Colors.color("&aJazda!"));
                 return;

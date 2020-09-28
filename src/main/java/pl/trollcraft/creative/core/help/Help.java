@@ -15,6 +15,30 @@ public class Help {
         return n;
     }
 
+    public static double isDouble(String a, double errNum) {
+        double n;
+        try {
+            n = Double.parseDouble(a);
+        }
+        catch (NumberFormatException e) {
+            return errNum;
+        }
+        return n;
+    }
+
+    public static float isFloat(String a, float errNum) {
+        float n;
+        try {
+            n = Float.parseFloat(a);
+        }
+        catch (NumberFormatException e) {
+            return errNum;
+        }
+        return n;
+    }
+
+    // ----
+
     public static boolean isSign(Material type) {
         return type.name().contains("SIGN");
     }

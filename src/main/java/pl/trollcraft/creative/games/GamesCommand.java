@@ -49,6 +49,11 @@ public class GamesCommand extends CommandController {
                     return;
                 }
 
+                if (playablesController.find(player) != null) {
+                    player.sendMessage(Colors.color("&cGrasz juz w gre."));
+                    return;
+                }
+
                 String name = args[1];
                 Playable playable = playablesController.find(name, Parkour.TYPENAME);
 

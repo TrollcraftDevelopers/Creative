@@ -1,7 +1,9 @@
 package pl.trollcraft.creative.games;
 
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Set;
 
 public interface Playable {
@@ -26,5 +28,7 @@ public interface Playable {
     void setConserved(boolean conserved);
 
     void delete();
+
+    List<GameMode> getGameModesAllowed();
 
 }

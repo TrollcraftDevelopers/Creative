@@ -7,7 +7,7 @@ import java.util.logging.Level;
 
 public class UserComponentsController {
 
-    private HashMap<String, Class> componentsClasses;
+    private HashMap<String, Class<? extends UserComponent>> componentsClasses;
 
     public UserComponentsController() {
         componentsClasses = new HashMap<>();
@@ -18,7 +18,7 @@ public class UserComponentsController {
         Bukkit.getServer().getLogger().log(Level.INFO, "Registered new component: " + componentName);
     }
 
-    public Class getComponentClass(String name) {
+    public Class<? extends UserComponent> getComponentClass(String name) {
         if (componentsClasses.containsKey(name))
             return componentsClasses.get(name);
         return null;

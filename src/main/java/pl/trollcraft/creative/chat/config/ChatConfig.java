@@ -54,7 +54,7 @@ public class ChatConfig {
             }
         }
 
-        return Colors.color(chatFormat.toString());
+        return chatFormat.toString();
 
     }
 

@@ -36,6 +36,9 @@ commands:
     description: Displays the shop.
     aliases: [sklep, skl, sho, shp]
 
+  seen:
+    description: See when the player was last time online.
+
   tails:
     description: Tails management command.
     aliases: [ogony, ogon, ogo]
@@ -51,6 +54,10 @@ commands:
     description: Changes a gamemode of a player.
     aliases: [gm]
 
+  speed:
+    description: Adjust your speed.
+    aliases: [predkosc, ped, pred]
+
   event:
     description: Makes players able to create their own mini-events.
     aliases: [ev, zd, eve]
@@ -65,6 +72,10 @@ commands:
   prefixes:
     description: Opens a prefixes shop and menu.
     aliases: [prefixy, prefiksy, pref]
+
+  colors:
+    description: Changes the color the player writes with.
+    aliases: [kolory, cols, kols]
 
   parkour:
     description: Manages parkours.
@@ -96,7 +107,6 @@ commands:
     description: Responses to recent messages.
     aliases: [r]
 
-
   sit:
     description: Makes the player sit.
     aliases: [usiadz, siadz]
@@ -104,6 +114,7 @@ commands:
   gry:
     description: Games command.
     aliases: [games, gra, game]
+
   home:
     description: Home system. Teleports player to home if created.
     aliases: [dom]
@@ -124,19 +135,3 @@ commands:
 
   delwarp:
     description: Deletes selected warp.
-
-  adminchat:
-    description: Chat for admins
-    aliases: [achat, ac]
-
-  openinventory:
-    description: Command to open inventory of other players
-    aliases: [oi]
-
-  openenderchest:
-    description: Command to open enderchests of other players
-    aliases: [oe]
-
-  hat:
-    description: Wear what ever you want on your head
-
