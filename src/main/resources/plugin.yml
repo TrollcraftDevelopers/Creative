@@ -19,7 +19,9 @@ commands:
     description: Accepts a teleport demand.
   tpdeny:
     description: Refuses a teleport demand.
-    aliases: [tp]
+    aliases: [tpd]
+  tptoggle:
+    description: Enables/Disables to demand a teleport
 
   rename:
     description: Changes name of an item.

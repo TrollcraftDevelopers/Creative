@@ -7,6 +7,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.essentials.homes.Home;
+import pl.trollcraft.creative.essentials.teleport.demanded.TeleportToggleCommand;
 
 public class PlayerEventsListener implements Listener {
 
@@ -33,6 +34,10 @@ public class PlayerEventsListener implements Listener {
             if (playerEvent != null)
                 playerEvent.leave(player);
 
+        }
+
+        if(TeleportToggleCommand.players_toggles.containsKey(player.getName())){
+            TeleportToggleCommand.players_toggles.remove(player.getName());
         }
 
     }
