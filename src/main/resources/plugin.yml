@@ -135,3 +135,18 @@ commands:
 
   delwarp:
     description: Deletes selected warp.
+
+  openinventory:
+    description: Command to open inventory of another player
+    aliases: [oi]
+
+  openenderchest:
+    description: Command to open enderchest of another player
+    aliases: [oe]
+
+  adminchat:
+    description: Admin chat Command
+    aliases: [ac, achat]
+
+  hat:
+    description: Wear anything on your head
