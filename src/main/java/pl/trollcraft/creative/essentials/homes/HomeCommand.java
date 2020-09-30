@@ -36,15 +36,17 @@ public class HomeCommand extends CommandController {
             else{
                 Home.showHomes(player);
             }
+            return;
         }
         if(args.length == 1){
             if(Home.doesHomeExist(player_name, args[0])){
-                player.teleport(Home.getHomeLocationByName(player_name, "default"));
+                player.teleport(Home.getHomeLocationByName(player_name, args[0]));
                 player.sendMessage(Colors.color("&aTeleportowano!"));
             }
             else{
                 Home.showHomes(player);
             }
+            return;
         }
     }
 }

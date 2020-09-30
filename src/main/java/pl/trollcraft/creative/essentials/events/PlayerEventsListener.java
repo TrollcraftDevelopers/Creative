@@ -40,6 +40,7 @@ public class PlayerEventsListener implements Listener {
             TeleportToggleCommand.players_toggles.remove(player.getName());
         }
 
+        Home.save(player);
     }
 
 }

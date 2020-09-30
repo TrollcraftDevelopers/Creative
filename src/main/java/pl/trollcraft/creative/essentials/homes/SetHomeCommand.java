@@ -41,6 +41,7 @@ public class SetHomeCommand extends CommandController {
                 else{
                     Home.addHome(player.getName(), home_name, player.getLocation());
                     player.sendMessage(Colors.color("&aUstawiono dom o nazwie " + home_name));
+                    return;
                 }
             }
         }

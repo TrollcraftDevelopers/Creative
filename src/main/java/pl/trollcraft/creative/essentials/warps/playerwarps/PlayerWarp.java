@@ -37,6 +37,20 @@ public class PlayerWarp {
         target.sendMessage(Colors.color(warps));
     }
 
+    public static boolean doesWarpExist(String player_name, String warp_name){
+        if(players_warps.containsKey(player_name)){
+            if(players_warps.get(player_name).containsKey(warp_name)){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
+    }
+
     public static int getPlayerWarpsAmount(String player_name){
         if(players_warps.containsKey(player_name)){
             return players_warps.get(player_name).size();
