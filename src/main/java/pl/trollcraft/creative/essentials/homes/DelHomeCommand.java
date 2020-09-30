@@ -15,18 +15,26 @@ public class DelHomeCommand extends CommandController {
             return;
         }
         Player player = (Player) sender;
-        if (args.length > 2) {
-            player.sendMessage(Colors.color("&cZa dużo argumentów."));
-            return;
-        }
-        for (Home home : Objects.requireNonNull(Home.gethomes(player))) {
-            if (args[0].equalsIgnoreCase(home.getName())) {
-                home.delete(player);
-                player.sendMessage(Colors.color("&cUsunieto home."));
+
+        if(args.length == 1){
+            String home_name = args[0];
+
+            if(home_name.equalsIgnoreCase("default")){
+                player.sendMessage(Colors.color("&cNie mozesz usunac tego home'a!"));
                 return;
             }
-        }
-        player.sendMessage(Colors.color("&c Nie ma takiego home."));
 
+            if(!Home.doesHomeExist(player.getName(), home_name)){
+                player.sendMessage(Colors.color("&cTen home nie istnieje!"));
+                Home.showHomes(player);
+                return;
+            }
+
+            Home.removeHome(player.getName(), home_name);
+            player.sendMessage(Colors.color("&cUsunieto home " + home_name));
+            return;
+        }
+
+        player.sendMessage(Colors.color("&7/" + label + " <nazwa>"));
     }
 }

@@ -20,38 +20,31 @@ public class HomeCommand extends CommandController {
             return;
         }
         Player player = (Player) sender;
-        if(args.length == 0){
-            if(Objects.requireNonNull(Home.gethomes(player)).size() > 1){
-                StringBuilder homesListStr = new StringBuilder();
-                for(Home home : Objects.requireNonNull(Home.gethomes(player))){
-                    homesListStr.append(home.getName()).append(" ");
-                }
-                player.sendMessage(Colors.color("&2Posiadane home: " + homesListStr));
-                return;
-            }
-        }
-        for (Home home : Objects.requireNonNull(Home.gethomes(player))) {
-            if (args.length == 0) {
-                if (Home.gethomes(player).size() == 1 && home.getName().equals("default")) {
-                    player.teleport(home.getLocation());
-                    return;
-                }
-            } else {
-                player.sendMessage(Colors.color("&cNie posiadasz żadnego home"));
-                return;
-            }
-            if (args[0].equalsIgnoreCase(home.getName())) {
-                player.teleport(home.getLocation());
-                player.sendMessage(Colors.color("&3Teleportowano do home" + args[0]));
-                return;
-            } else {
-                player.sendMessage(Colors.color("&3 Nie ma takiego domu o takiej nazwie."));
-                return;
-            }
-        }
-        if (args.length > 1) {
-            player.sendMessage(Colors.color("&2Za duza ilosc argumentow"));
+
+        String player_name = player.getName();
+
+        if(!Home.doesPlayerHasHomes(player_name)){
+            player.sendMessage(Colors.color("&cNie posiadasz zadnych home'ow!"));
             return;
+        }
+
+        if(args.length == 0){
+            if(Home.doesHomeExist(player_name, "default")){
+                player.teleport(Home.getHomeLocationByName(player_name, "default"));
+                player.sendMessage(Colors.color("&aTeleportowano!"));
+            }
+            else{
+                Home.showHomes(player);
+            }
+        }
+        if(args.length == 1){
+            if(Home.doesHomeExist(player_name, args[0])){
+                player.teleport(Home.getHomeLocationByName(player_name, "default"));
+                player.sendMessage(Colors.color("&aTeleportowano!"));
+            }
+            else{
+                Home.showHomes(player);
+            }
         }
     }
 }
