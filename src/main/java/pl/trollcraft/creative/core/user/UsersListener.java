@@ -7,9 +7,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.trollcraft.creative.Creative;
+import pl.trollcraft.creative.core.user.event.UserCreateEvent;
+import pl.trollcraft.creative.core.user.event.UserDeleteEvent;
 import pl.trollcraft.creative.services.pets.PetsComponent;
 import pl.trollcraft.creative.services.tails.TailsComponent;
 import pl.trollcraft.creative.services.vehicles.VehiclesComponent;
+
+import java.util.logging.Level;
 
 public class UsersListener implements Listener {
 
@@ -27,12 +31,16 @@ public class UsersListener implements Listener {
     public void onQuit (PlayerQuitEvent event) {
         Player player = event.getPlayer();
         String name = player.getName();
+
         User user = plugin.getUserController().find(name);
+        Bukkit.getPluginManager().callEvent(new UserDeleteEvent(user));
 
-        if (user == null || user.isEmpty()) return;
+        assert user != null;
+        if (!user.isEmpty())
+            controller.save(user);
 
-        controller.save(user);
         controller.unregister(user);
+        Bukkit.getLogger().log(Level.INFO, "Unregistered user model " + name);
     }
 
     @EventHandler

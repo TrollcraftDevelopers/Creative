@@ -29,9 +29,11 @@ import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
 import pl.trollcraft.creative.essentials.colors.ChatColorCommand;
+import pl.trollcraft.creative.essentials.colors.ChatColorsComponent;
 import pl.trollcraft.creative.essentials.colors.ColorsListener;
 import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
-import pl.trollcraft.creative.essentials.commands.RideEntityCommand;
+import pl.trollcraft.creative.essentials.seen.SeenComponent;
+import pl.trollcraft.creative.services.pets.RideEntityCommand;
 import pl.trollcraft.creative.essentials.commands.SpeedCommand;
 import pl.trollcraft.creative.essentials.commands.naming.RenamePlayerCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
@@ -186,6 +188,8 @@ public final class Creative extends Perspectivum {
         componentsController.register(PrefixesComponent.COMP_NAME, PrefixesComponent.class);
         componentsController.register(WorldEditComponent.COMP_NAME, WorldEditComponent.class);
         componentsController.register(PetsComponent.COMP_NAME, PetsComponent.class);
+        componentsController.register(SeenComponent.COMP_NAME, SeenComponent.class);
+        componentsController.register(ChatColorsComponent.COMP_NAME, ChatColorsComponent.class);
 
         demandsController = new DemandsController();
         userController = new UsersController();

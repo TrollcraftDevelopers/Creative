@@ -47,11 +47,6 @@ public class AcceptTeleportCommand extends CommandController {
         demandsController.accept(demand);
         sender.sendMessage(Colors.color("&aZaakceptowano prosbe teleportacji od gracza &e" + demand.getWho()));
 
-        String whoName = demand.getWho();
-        Player who = Bukkit.getPlayer(whoName);
-        if (who != null && who.isOnline())
-            who.sendMessage(Colors.color("&aGracz " + sender.getName() + " &azaakceptowal Twoja prosbe teleportacji."));
-
     }
 
 }

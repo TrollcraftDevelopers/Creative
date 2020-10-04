@@ -46,11 +46,6 @@ public class RefuseTeleportCommand extends CommandController {
         demandsController.refuse(demand);
         sender.sendMessage(Colors.color("&7Odrzucono prosbe teleportacji od gracza &e" + demand.getWho()));
 
-        String whoName = demand.getWho();
-        Player who = Bukkit.getPlayer(whoName);
-        if (who != null && who.isOnline())
-            who.sendMessage(Colors.color("&cGracz " + sender.getName() + " &codrzucil Twoja prosbe teleportacji."));
-
     }
 
 }

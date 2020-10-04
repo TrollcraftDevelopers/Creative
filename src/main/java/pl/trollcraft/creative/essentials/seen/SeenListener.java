@@ -3,10 +3,12 @@ package pl.trollcraft.creative.essentials.seen;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerQuitEvent;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.user.User;
-import pl.trollcraft.creative.core.user.UserCreateEvent;
+import pl.trollcraft.creative.core.user.event.UserCreateEvent;
+import pl.trollcraft.creative.core.user.event.UserDeleteEvent;
+
+import java.util.Optional;
 
 public class SeenListener implements Listener {
 
@@ -18,8 +20,16 @@ public class SeenListener implements Listener {
     }
 
     @EventHandler
-    public void onQuit (PlayerQuitEvent event) {
-        updateSeenComponent(event.getPlayer());
+    public void onUserDelete (UserDeleteEvent event) {
+
+        User user = event.getUser();
+        Optional<Player> opt = user.getPlayer();
+
+        if (opt.isPresent()) {
+            Player player = opt.get();
+            updateSeenComponent(player);
+        }
+
     }
 
     private void updateSeenComponent(Player player) {

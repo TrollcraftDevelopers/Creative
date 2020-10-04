@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.gui.GUI;
 import pl.trollcraft.creative.core.windows.Window;
@@ -20,6 +21,7 @@ public class InventoryListener implements Listener {
     public void onClick (InventoryClickEvent event) {
 
         if (event.getClickedInventory() == null) return;
+        if (event.getClickedInventory().getType() == InventoryType.PLAYER) return;
 
         GUIManager guiManager = Creative.getPlugin().getGuiManager();
 
