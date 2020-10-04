@@ -62,7 +62,8 @@ public class PetSelectView {
                     else {
                         petSession.getNpc().despawn();
                         petSession.getNpc().destroy();
-                        Creative.getPlugin().getPetSessionsController().unregister(petSession);
+                        Creative.getPlugin().getPetSessionsController()
+                                .unregister(petSession);
                     }
                 }
 
@@ -73,6 +74,7 @@ public class PetSelectView {
                 display();
 
             });
+            slot++;
 
         }
 

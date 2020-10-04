@@ -2,7 +2,6 @@ package pl.trollcraft.creative.safety.worldedit;
 
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +11,7 @@ import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.help.Help;
 import pl.trollcraft.creative.core.user.User;
-import pl.trollcraft.creative.core.user.UserCreateEvent;
+import pl.trollcraft.creative.core.user.event.UserCreateEvent;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.safety.blocks.LimitsController;
 

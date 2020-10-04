@@ -1,7 +1,8 @@
-package pl.trollcraft.creative.core.user;
+package pl.trollcraft.creative.core.user.event;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import pl.trollcraft.creative.core.user.User;
 
 public class UserCreateEvent extends Event {
 
