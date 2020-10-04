@@ -28,13 +28,18 @@ import pl.trollcraft.creative.core.help.demands.DemandsController;
 import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
+import pl.trollcraft.creative.essentials.adminchat.AdminChatCommand;
 import pl.trollcraft.creative.essentials.colors.ChatColorCommand;
 import pl.trollcraft.creative.essentials.colors.ChatColorsComponent;
 import pl.trollcraft.creative.essentials.colors.ColorsListener;
+
+import pl.trollcraft.creative.essentials.commands.*;
+
 import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
 import pl.trollcraft.creative.essentials.seen.SeenComponent;
 import pl.trollcraft.creative.services.pets.RideEntityCommand;
 import pl.trollcraft.creative.essentials.commands.SpeedCommand;
+
 import pl.trollcraft.creative.essentials.commands.naming.RenamePlayerCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsCommand;
 import pl.trollcraft.creative.essentials.events.PlayerEventsController;
@@ -55,6 +60,7 @@ import pl.trollcraft.creative.essentials.teleport.TeleportHereCommand;
 import pl.trollcraft.creative.essentials.teleport.demanded.AcceptTeleportCommand;
 import pl.trollcraft.creative.essentials.teleport.demanded.DemandedTeleportCommand;
 import pl.trollcraft.creative.essentials.teleport.demanded.RefuseTeleportCommand;
+import pl.trollcraft.creative.essentials.teleport.demanded.TeleportToggleCommand;
 import pl.trollcraft.creative.essentials.warps.DelWarpCommand;
 import pl.trollcraft.creative.essentials.warps.SetWarpCommand;
 import pl.trollcraft.creative.essentials.warps.Warp;
@@ -251,6 +257,7 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("tpa", DemandedTeleportCommand.class);
         commandsManager.bind("tpaccept", AcceptTeleportCommand.class);
         commandsManager.bind("tpdeny", RefuseTeleportCommand.class);
+        commandsManager.bind("tptoggle", TeleportToggleCommand.class);
 
         commandsManager.bind("rename", RenameItemController.class);
         commandsManager.bind("lore", LoreItemController.class);
@@ -281,6 +288,10 @@ public final class Creative extends Perspectivum {
         commandsManager.bind("warp", WarpCommand.class);
         commandsManager.bind("setwarp", SetWarpCommand.class);
         commandsManager.bind("delwarp", DelWarpCommand.class);
+        commandsManager.bind("openenderchest", OpenEnderchestCommand.class);
+        commandsManager.bind("openinventory", OpenInventoryCommand.class);
+        commandsManager.bind("hat", HatCommand.class);
+        commandsManager.bind("adminchat", AdminChatCommand.class);
 
     }
 

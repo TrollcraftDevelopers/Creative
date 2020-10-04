@@ -32,6 +32,15 @@ public class DemandedTeleportCommand extends CommandController {
             return;
         }
 
+        if(!target.hasPermission("creative.tptoggle.bypass")){
+            if(TeleportToggleCommand.players_toggles.containsKey(targetName)){
+                if(!TeleportToggleCommand.players_toggles.get(targetName)){
+                    sender.sendMessage(Colors.color("&cTen gracz ma wylaczona mozliwosc teleportacji!"));
+                    return;
+                }
+            }
+        }
+
         DemandsController demandsController = Creative.getPlugin().getDemandsController();
 
         if (demandsController.find("TPA", sender.getName(), target.getName()) != null) {

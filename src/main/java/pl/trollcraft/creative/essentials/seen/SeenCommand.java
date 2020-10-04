@@ -1,6 +1,5 @@
 package pl.trollcraft.creative.essentials.seen;
 
-import javafx.scene.paint.Color;
 import org.bukkit.command.CommandSender;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.commands.CommandController;
