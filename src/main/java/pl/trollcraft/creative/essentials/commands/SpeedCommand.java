@@ -8,6 +8,8 @@ import pl.trollcraft.creative.core.help.Help;
 
 public class SpeedCommand extends CommandController {
 
+    // Flying = 1-10
+
     @Override
     public void command(CommandSender sender, String label, String[] args) {
 
@@ -26,37 +28,51 @@ public class SpeedCommand extends CommandController {
             return;
         }
 
+        // Checking if input is number.
         float speed = Help.isFloat(args[0], -1F);
         if (speed == -1F) {
             sender.sendMessage(Colors.color("&cTo nie jest liczba."));
             return;
         }
 
-        if (speed > 1) {
-            speed++;
-            speed /= 10;
-        }
-        else if (speed == 1)
-            speed = 0.2F;
-
-        else if (speed > 10) {
-            sender.sendMessage(Colors.color("&cZbyt wysoka predkosc - musi byc mniejsza lub rowna 10."));
-            return;
-        }
-        else {
-            sender.sendMessage(Colors.color("&cZbyt niska predkosc - musi byc wieksza lub rowna 1."));
+        if (speed > 10 || speed <= 0) {
+            sender.sendMessage(Colors.color("&cZla wartosc - nie mozesz byc mniejsza rowna 0, ani wieksza od 10."));
             return;
         }
 
         Player player = (Player) sender;
 
         if (player.isFlying()) {
-            player.setFlySpeed(speed);
-            player.sendMessage(Colors.color("&aPredkosc lotu zostala zmieniona."));
+            setFlySpeed(speed, player);
+            player.sendMessage(Colors.color("&aUstawiono predkosc lotu na &e" + speed));
         }
         else {
-            player.setWalkSpeed(speed);
-            player.sendMessage(Colors.color("&aPredkosc chodu zostala zmieniona."));
+            setWalkSpeed(speed, player);
+            player.sendMessage(Colors.color("&aUstawiono predkosc biegu na &e" + speed));
         }
+
     }
+
+    private void setWalkSpeed(float speed, Player player) {
+
+        float a;
+
+        // G(X) = -0.2 * (x - 1) + 0.2
+        if (speed < 1)
+            a = -.2F;
+
+
+        // F(x) = 4/405 * (x - 1)^2 + 0.2
+        else
+            a = 4F/405F;
+
+        float speedVal = a * (float) Math.pow(speed - 1, 2) + .2F;
+        player.setWalkSpeed(speedVal);
+
+    }
+
+    private void setFlySpeed(float speed, Player player) {
+        player.setFlySpeed(speed / 10);
+    }
+
 }

@@ -62,6 +62,8 @@ public class PetManageView {
             });
         }
 
+        // Naming
+
         // Closing
 
         ItemStack close = ItemStackBuilder.init(Material.BARRIER)

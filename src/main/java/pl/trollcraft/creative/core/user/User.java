@@ -1,5 +1,8 @@
 package pl.trollcraft.creative.core.user;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,10 +51,8 @@ public class User {
                 .filter( comp -> comp.getName().equals(componentName) )
                 .findAny();
 
-        if (opt.isPresent())
-            return opt.get();
+        return opt.orElse(null);
 
-        return null;
     }
 
     public List<UserComponent> getComponents() {
@@ -74,12 +75,16 @@ public class User {
         return true;
     }
 
+    public Optional<Player> getPlayer() {
+        return Optional.ofNullable(Bukkit.getPlayer(name));
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof String) {
             String id = (String) obj;
             return name.equals(id);
         }
-        return false;
+        return super.equals(obj);
     }
 }

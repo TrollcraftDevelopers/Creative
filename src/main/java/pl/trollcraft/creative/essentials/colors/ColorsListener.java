@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.user.User;
-import pl.trollcraft.creative.core.user.UserCreateEvent;
+import pl.trollcraft.creative.core.user.event.UserCreateEvent;
 
 import java.util.Objects;
 
