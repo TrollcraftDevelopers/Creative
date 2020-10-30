@@ -2,7 +2,10 @@ package pl.trollcraft.creative.core;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import pl.trollcraft.creative.core.commands.CommandsManager;
 import pl.trollcraft.creative.core.controlling.PersistenceManager;
+import pl.trollcraft.creative.core.reloading.ReloadCommand;
+import pl.trollcraft.creative.core.reloading.ReloadsController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +28,9 @@ public class Perspectivum extends JavaPlugin {
      * @see PersistenceManager
      */
     private List<PersistenceManager> persistenceManagers;
+
+    private ReloadsController reloadsController;
+    private CommandsManager commandsManager;
 
     public void init() {}
     public void dependencies() {}
@@ -105,13 +111,16 @@ public class Perspectivum extends JavaPlugin {
         init();
         dependencies();
 
+        reloadsController = new ReloadsController();
         controllers();
 
         data();
         loadData();
 
+        commandsManager = new CommandsManager(this);
         managers();
 
+        commandsManager.bind("preload", ReloadCommand.class);
         commands();
         events();
     }
@@ -126,4 +135,15 @@ public class Perspectivum extends JavaPlugin {
         save();
         saveData();
     }
+
+    // --------
+
+    public ReloadsController getReloadsController() {
+        return reloadsController;
+    }
+
+    protected CommandsManager getCommandsManager() {
+        return commandsManager;
+    }
+
 }

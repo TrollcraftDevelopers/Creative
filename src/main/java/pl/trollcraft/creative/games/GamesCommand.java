@@ -26,10 +26,11 @@ public class GamesCommand extends CommandController {
         if (args.length == 0) {
             player.sendMessage(Colors.color("&aGry Creative:"));
             player.sendMessage("");
-            player.sendMessage(Colors.color("&aWitaj w systemie gier i atrakcji Creative TC!"));
+            player.sendMessage(Colors.color("&aWitaj w systemie gier i atrakcji Creative!"));
             player.sendMessage(Colors.color("&aTworz niesamowite gry i udostepniaj je innym graczom!"));
             player.sendMessage("");
             player.sendMessage(Colors.color("&e/gra dolacz <nazwa> &7- dolacz do gry o danej nazwie,"));
+            player.sendMessage(Colors.color("&e/gra losowa &7- dolacz do losowej gry,"));
             player.sendMessage(Colors.color("&e/gra opusc &7- opuszcza aktualna gre,"));
             player.sendMessage("");
             player.sendMessage(Colors.color("&e/gra info <nazwa> &7- informacje o grze,"));
@@ -75,6 +76,26 @@ public class GamesCommand extends CommandController {
 
                 player.sendMessage(Colors.color("&aDolaczono do gry."));
             }
+
+            else if (args[0].equalsIgnoreCase("losowa")) {
+
+                if (playablesController.find(player) != null) {
+                    player.sendMessage(Colors.color("&cGrasz juz w gre."));
+                    return;
+                }
+
+                Playable playable = playablesController.random();
+                Result result = playable.join(player);
+                if (result != Result.JOINED){
+                    player.sendMessage(Colors.color("&c" + result.getMessage()));
+                    return;
+                }
+
+                player.sendMessage(Colors.color("&aDolaczono do gry."));
+                return;
+
+            }
+
             else if (args[0].equalsIgnoreCase("opusc")) {
 
                 Playable playable = playablesController.find(player);

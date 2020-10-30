@@ -5,9 +5,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.Configs;
+import pl.trollcraft.creative.core.help.Colors;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class ChatProfile {
 
@@ -18,13 +21,36 @@ public class ChatProfile {
     private boolean chatEnabled;
     private String lastMessage;
     private long lockedMessagingTill;
+    private List<String> ignored;
+    private long cannotWriteSince;
 
-    public ChatProfile (Player player, boolean chatEnabled) {
+    public ChatProfile (Player player, boolean chatEnabled, List<String> ignored) {
         this.player = player;
         this.chatEnabled = chatEnabled;
         lastMessage = null;
         lockedMessagingTill = 0;
+        this.ignored = ignored;
         profiles.put(player.getEntityId(), this);
+    }
+
+    public void blockWriting() {
+        cannotWriteSince = System.currentTimeMillis();
+    }
+
+    public boolean isAbleToWrite() {
+        if (cannotWriteSince == -1 || cannotWriteSince == 0)
+            return true;
+
+        if (System.currentTimeMillis() >= cannotWriteSince + 5*1000*60) {
+            cannotWriteSince = -1;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void setCannotWriteSince(long cannotWriteSince) {
+        this.cannotWriteSince = cannotWriteSince;
     }
 
     // -------- -------- -------- -------- --------
@@ -51,6 +77,10 @@ public class ChatProfile {
 
     public void lockMessaging(long seconds) { lockedMessagingTill = System.currentTimeMillis() + 1000L * seconds; }
 
+    public List<String> getIgnored() {
+        return ignored;
+    }
+
     public void save() {
         new BukkitRunnable() {
 
@@ -58,10 +88,22 @@ public class ChatProfile {
             public void run() {
                 YamlConfiguration conf = Configs.load("chatprofiles.yml");
                 conf.set("chatprofiles." + player.getName() + ".chatEnabled", chatEnabled);
+                conf.set("chatprofiles." + player.getName() + ".ignored", ignored);
+
+                if (cannotWriteSince != -1 && cannotWriteSince != 0)
+                    conf.set("chatprofiles." + player.getName() + ".cannotWriteSince", cannotWriteSince);
+                else
+                    conf.set("chatprofiles." + player.getName() + ".cannotWriteSince", null);
+
                 Configs.save(conf, "chatprofiles.yml");
+
             }
 
         }.runTaskAsynchronously(Creative.getPlugin());
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     // -------- -------- -------- -------- --------
@@ -72,26 +114,41 @@ public class ChatProfile {
         return profiles.get(player.getEntityId());
     }
 
+    public static HashMap<Integer, ChatProfile> getProfiles() {
+        return profiles;
+    }
+
     // -------- -------- -------- -------- --------
 
     public static void load(Player player) {
-        new BukkitRunnable() {
 
-            @Override
-            public void run() {
-                boolean chatEnabled = true;
+        boolean chatEnabled;
+        List<String> ignored;
 
-                if (player.hasPermission("prison.vip")){
-                    String name = player.getName();
-                    YamlConfiguration conf = Configs.load("chatprofiles.yml");
-                    if (conf.contains("chatprofiles." + name))
-                        chatEnabled = conf.getBoolean("chatprofiles." + name + ".chatEnabled");
-                }
+        String name = player.getName();
+        YamlConfiguration conf = Configs.load("chatprofiles.yml");
 
-                new ChatProfile(player, chatEnabled);
-            }
+        if (conf.contains("chatprofiles." + name)) {
+            chatEnabled = conf.getBoolean("chatprofiles." + name + ".chatEnabled");
 
-        }.runTaskAsynchronously(Creative.getPlugin());
+            if (conf.contains("chatprofiles." + name + ".ignored"))
+                ignored = conf.getStringList("chatprofiles." + name + ".ignored");
+            else
+                ignored = new ArrayList<>();
+
+            ChatProfile profile = new ChatProfile(player, chatEnabled, ignored);
+
+            if (conf.contains("chatprofiles." + name + ".cannotWriteSince"))
+                profile.setCannotWriteSince(conf.getLong("chatprofiles." + name + ".cannotWriteSince"));
+            else
+                profile.setCannotWriteSince(-1);
+
+        }
+        else {
+            new ChatProfile(player, true, new ArrayList<>()).blockWriting();
+            player.sendMessage(Colors.color("&7Pisac bedziesz mogl za &e5 minut z powodu wejsca po raz pierwszy."));
+        }
+
     }
 
 }

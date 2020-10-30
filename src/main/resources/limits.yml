@@ -1,3 +1,10 @@
+#
+# Creative TC - LimitFile Configuration System
+#
+
 limits:
-  stone:
-    amount: 100
+
+  # Podłącza pliki do rejestrów
+  link:
+    - 'basic.txt > chunks'
+    - 'we.txt > we'

@@ -12,7 +12,7 @@ public class ChatBlockadesListener implements Listener {
     @EventHandler
     public void onChat (AsyncPlayerChatEvent event) {
         String message = event.getMessage();
-        ChatBlockade blockade = controller.find(message);
+        ChatBlockade blockade = controller.find(message.toLowerCase());
 
         if (blockade != null)
             blockade.getAction().act(event);

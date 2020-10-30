@@ -110,7 +110,7 @@
             <artifactId>plotswuared</artifactId>
             <version>4.4.495</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/PlotSquared-Bukkit-4.4.495.jar</systemPath>
+            <systemPath>${project.basedir}/lib/PlotSquared-Bukkit-5.13.6-Premium.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -151,6 +151,22 @@
             <version>1.7.2</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/Vault.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>premiumvanish</artifactId>
+            <version>1.7.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/PremiumVanish.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>worldguard</artifactId>
+            <version>1.7.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/worldguard-bukkit-7.0.3.jar</systemPath>
         </dependency>
 
     </dependencies>

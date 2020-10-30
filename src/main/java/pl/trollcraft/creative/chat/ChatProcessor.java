@@ -10,7 +10,7 @@ public class ChatProcessor {
         SAME_MSG("&cProsze nie powtarzac wiadomosci."),
         CHAT_OFF("&cTwoj chat jest wylaczony."),
         LOCKED("&cMozesz pisac co 2 sekundy."),
-        WRONG_LEVEL("&cMozesz pisac od drugiego poziomu."),
+        CANNOT_WRITE("&cDolaczyles pierwszy raz - pisac bedziesz mogl po 5 minutach."),
         OK("OK");
 
         private String message;
@@ -33,18 +33,19 @@ public class ChatProcessor {
 
     // -------- -------- -------- --------
 
-    public static String deflood(String message) { return message.replaceAll("(...+?)\\1+", "$1"); }
+    //public static String deflood(String message) { return message.replaceAll("(...+?)\\1+", "$1"); }
 
     public static Response process(Player player, String message) {
-        ChatProfile chatProfile = ChatProfile.get(player);
-        //ChatProfile chatProfile = ChatProfile.get(player);
+        if (player.hasPermission("creative.chat.admin")) return Response.OK;
 
-        if (player.hasPermission("pvp.admin")) return Response.OK;
+        ChatProfile chatProfile = ChatProfile.get(player);
 
         if (!chatEnabled) return Response.DISABLED;
+
+        if (!chatProfile.isAbleToWrite()) return Response.CANNOT_WRITE;
         if (!chatProfile.hasChatEnabled()) return Response.CHAT_OFF;
         if (chatProfile.changeLastMessage(message)) return Response.SAME_MSG;
-        if (!chatProfile.canWrite()) return Response.LOCKED;
+        if (!chatProfile.canWrite() && !player.hasPermission("creative.chat.limit.bypass")) return Response.LOCKED;
 
         chatProfile.lockMessaging(2);
         return Response.OK;

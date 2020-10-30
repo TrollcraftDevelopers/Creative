@@ -28,6 +28,14 @@ public class Vehicle implements Service {
         this.name = name;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public String getSubType() {
+        return subType;
+    }
+
     @Override
     public String getId() {
         return id;

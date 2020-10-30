@@ -16,7 +16,7 @@ public class TeleportHereCommand extends CommandController {
             return;
         }
 
-        if (!sender.hasPermission("creative.admin")){
+        if (!sender.hasPermission("creative.tphere")){
             sender.sendMessage(Colors.color("&cBrak uprawnien."));
             return;
         }

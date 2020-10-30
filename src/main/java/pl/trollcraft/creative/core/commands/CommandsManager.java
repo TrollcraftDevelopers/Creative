@@ -17,9 +17,7 @@ public class CommandsManager {
             CommandController commandController = controller.newInstance();
             plugin.getCommand(commandName).setExecutor(commandController);
 
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 

@@ -5,38 +5,51 @@ import com.comphenix.protocol.ProtocolManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.scheduler.BukkitRunnable;
 import pl.trollcraft.creative.chat.AutoMessages;
 import pl.trollcraft.creative.chat.ChatListener;
 import pl.trollcraft.creative.chat.blockades.ChatBlockadesController;
 import pl.trollcraft.creative.chat.blockades.ChatBlockadesListener;
 import pl.trollcraft.creative.chat.blockades.actions.BlockAction;
 import pl.trollcraft.creative.chat.blockades.actions.BlockadeAction;
-import pl.trollcraft.creative.chat.commands.BroadcastCommand;
-import pl.trollcraft.creative.chat.commands.ChatCommand;
-import pl.trollcraft.creative.chat.commands.MessageCommand;
-import pl.trollcraft.creative.chat.commands.ResponseCommand;
+import pl.trollcraft.creative.chat.commands.*;
+import pl.trollcraft.creative.chat.commands.socialspy.SocialSpyCommand;
+import pl.trollcraft.creative.chat.commands.socialspy.SocialSpyManager;
 import pl.trollcraft.creative.chat.config.ChatConfig;
-import pl.trollcraft.creative.core.commands.CommandsManager;
 import pl.trollcraft.creative.core.Perspectivum;
 import pl.trollcraft.creative.core.controlling.Controller;
 import pl.trollcraft.creative.core.gui.GUIManager;
 import pl.trollcraft.creative.core.gui.InventoryListener;
 import pl.trollcraft.creative.core.help.WorldLoader;
+import pl.trollcraft.creative.core.help.blockades.BlockadesController;
 import pl.trollcraft.creative.core.help.blocksdetector.BlockDetector;
 import pl.trollcraft.creative.core.help.chatcreator.ChatCreator;
 import pl.trollcraft.creative.core.help.demands.DemandsController;
+import pl.trollcraft.creative.core.help.movement.MovementDetector;
 import pl.trollcraft.creative.core.user.UserComponentsController;
 import pl.trollcraft.creative.core.user.UsersController;
 import pl.trollcraft.creative.core.user.UsersListener;
 import pl.trollcraft.creative.essentials.adminchat.AdminChatCommand;
+import pl.trollcraft.creative.essentials.antyafk.AntyAfkManager;
 import pl.trollcraft.creative.essentials.colors.ChatColorCommand;
 import pl.trollcraft.creative.essentials.colors.ChatColorsComponent;
 import pl.trollcraft.creative.essentials.colors.ColorsListener;
 
+import pl.trollcraft.creative.essentials.colors.data.ChatColorDataController;
 import pl.trollcraft.creative.essentials.commands.*;
 
 import pl.trollcraft.creative.essentials.commands.GamemodeCommand;
+import pl.trollcraft.creative.essentials.giving.GiveCommand;
+import pl.trollcraft.creative.essentials.giving.ItemsController;
+import pl.trollcraft.creative.essentials.plots.MorePlotsCommand;
+import pl.trollcraft.creative.essentials.plots.PlotsData;
 import pl.trollcraft.creative.essentials.seen.SeenComponent;
+import pl.trollcraft.creative.safety.limits.file.LimitFileCommand;
+import pl.trollcraft.creative.safety.limits.file.LimitFilesController;
+import pl.trollcraft.creative.safety.players.VoidFallPreventer;
+import pl.trollcraft.creative.safety.vehicles.AbstractVehiclesController;
+import pl.trollcraft.creative.safety.vehicles.VehiclesListener;
+import pl.trollcraft.creative.safety.worldedit.listener.WorldEditLimits;
 import pl.trollcraft.creative.services.pets.RideEntityCommand;
 import pl.trollcraft.creative.essentials.commands.SpeedCommand;
 
@@ -76,9 +89,6 @@ import pl.trollcraft.creative.prefixes.PrefixesCommand;
 import pl.trollcraft.creative.prefixes.obj.PrefixesComponent;
 import pl.trollcraft.creative.prefixes.obj.PrefixesController;
 import pl.trollcraft.creative.prefixes.obj.PrefixesListener;
-import pl.trollcraft.creative.safety.blocks.BlocksController;
-import pl.trollcraft.creative.safety.blocks.BlocksListener;
-import pl.trollcraft.creative.safety.blocks.LimitsController;
 import pl.trollcraft.creative.safety.leaks.SafetyCommand;
 import pl.trollcraft.creative.safety.leaks.SafetyListener;
 import pl.trollcraft.creative.safety.leaks.SafetyProviderController;
@@ -98,6 +108,7 @@ import pl.trollcraft.creative.services.tails.TailsManager;
 import pl.trollcraft.creative.services.vehicles.VehiclesCommand;
 import pl.trollcraft.creative.services.vehicles.VehiclesComponent;
 import pl.trollcraft.creative.services.vehicles.VehiclesController;
+import pl.trollcraft.creative.services.vehicles.manage.DeleteVehiclesCommand;
 import pl.trollcraft.creative.shops.ShopCommand;
 import pl.trollcraft.creative.essentials.commands.naming.LoreItemController;
 import pl.trollcraft.creative.essentials.commands.naming.RenameItemController;
@@ -112,12 +123,15 @@ public final class Creative extends Perspectivum {
 
     private Economy economy;
 
-    private BlockDetector blockDetector;
+    private PlotsData plotsData;
 
-    private CommandsManager commandsManager;
+    private BlockDetector blockDetector;
+    private MovementDetector movementDetector;
+
     private ProtocolManager protocolManager;
     private GUIManager guiManager;
     private ShopManager shopManager;
+    private SocialSpyManager socialSpyManager;
     private ChatConfig chatConfig;
 
     private DemandsController demandsController;
@@ -129,10 +143,14 @@ public final class Creative extends Perspectivum {
     private PlayerEventsController playerEventsController;
     private ChatBlockadesController chatBlockadesController;
     private Controller<BlockadeAction, String> blockadeActionsController;
-    private LimitsController limitsController;
-    private BlocksController blocksController;
+
     private WorldEditCommandsController worldEditCommandsController;
     private PrefixesController prefixesController;
+    private BlockadesController blockadesController;
+    private AbstractVehiclesController abstractVehiclesController;
+    private ItemsController itemsController;
+    private ChatColorDataController chatColorDataController;
+    private LimitFilesController limitFilesController;
 
     private AttractionsController attractionsController;
     private PlayablesController playablesController;
@@ -153,6 +171,7 @@ public final class Creative extends Perspectivum {
         WorldLoader.load();
         blockDetector = new BlockDetector(this);
         blockDetector.monitor();
+        movementDetector = MovementDetector.newInstance();
     }
 
     @Override
@@ -170,7 +189,9 @@ public final class Creative extends Perspectivum {
     public void data() {
         AutoMessages.init();
         TailsManager.load();
-        Warp.load();
+
+        plotsData = new PlotsData();
+        plotsData.load();
 
         chatConfig = new ChatConfig();
         chatConfig.load();
@@ -186,7 +207,7 @@ public final class Creative extends Perspectivum {
 
     @Override
     public void controllers() {
-        safetyProviderController = new SafetyProviderController(this);
+        //safetyProviderController = new SafetyProviderController(this);
         componentsController = new UserComponentsController();
 
         componentsController.register(TailsComponent.COMP_NAME, TailsComponent.class);
@@ -197,6 +218,12 @@ public final class Creative extends Perspectivum {
         componentsController.register(SeenComponent.COMP_NAME, SeenComponent.class);
         componentsController.register(ChatColorsComponent.COMP_NAME, ChatColorsComponent.class);
 
+        limitFilesController = new LimitFilesController();
+        limitFilesController.load();
+        limitFilesController.configure();
+
+        worldEditCommandsController = new WorldEditCommandsController();
+
         demandsController = new DemandsController();
         userController = new UsersController();
         vehiclesController = new VehiclesController();
@@ -205,10 +232,11 @@ public final class Creative extends Perspectivum {
         blockadeActionsController = new Controller<>();
         blockadeActionsController.register(new BlockAction());
         chatBlockadesController = new ChatBlockadesController();
-        limitsController = new LimitsController();
-        blocksController = new BlocksController();
-        worldEditCommandsController = new WorldEditCommandsController();
+
         prefixesController = new PrefixesController();
+
+        blockadesController = new BlockadesController();
+        blockadesController.newInstance("messages");
 
         attractionsController = new AttractionsController();
         playablesController = new PlayablesController();
@@ -218,23 +246,42 @@ public final class Creative extends Perspectivum {
         petsController = new PetsController();
         petSessionsController = new PetSessionsController();
 
+        abstractVehiclesController = new AbstractVehiclesController();
+
+        chatColorDataController = new ChatColorDataController();
+        chatColorDataController.load();
+
+        new BukkitRunnable() {
+
+            @Override
+            public void run() {
+                abstractVehiclesController.load();
+                Warp.load();
+            }
+
+        }.runTaskLater(this, 20*10);
+
+
+        itemsController = new ItemsController();
+        itemsController.load();
+
         chatBlockadesController.load();
         vehiclesController.load();
         specialItemsController.load();
-        limitsController.load();
         worldEditCommandsController.load();
         prefixesController.load();
     }
 
     @Override
     public void managers() {
-        commandsManager = new CommandsManager(this);
         protocolManager = ProtocolLibrary.getProtocolManager();
 
         guiManager = new GUIManager();
 
         shopManager = new ShopManager();
         shopManager.init();
+
+        socialSpyManager = SocialSpyManager.newInstance();
 
         chatCreator = new ChatCreator();
 
@@ -243,79 +290,100 @@ public final class Creative extends Perspectivum {
         SpecialItemsListener.listen();
 
         ScheduledMoneyManager.init();
+
+        VoidFallPreventer.observePlayers();
     }
 
     @Override
     public void commands() {
-        commandsManager.bind("spawn", SpawnCommand.class);
-        commandsManager.bind("setspawn", SetSpawnCommand.class);
+        getCommandsManager().bind("spawn", SpawnCommand.class);
+        getCommandsManager().bind("setspawn", SetSpawnCommand.class);
 
-        commandsManager.bind("seen", SeenCommand.class);
+        getCommandsManager().bind("seen", SeenCommand.class);
+        getCommandsManager().bind("give", GiveCommand.class);
 
-        commandsManager.bind("teleport", InstantTeleportCommand.class);
-        commandsManager.bind("tphere", TeleportHereCommand.class);
-        commandsManager.bind("tpa", DemandedTeleportCommand.class);
-        commandsManager.bind("tpaccept", AcceptTeleportCommand.class);
-        commandsManager.bind("tpdeny", RefuseTeleportCommand.class);
-        commandsManager.bind("tptoggle", TeleportToggleCommand.class);
+        getCommandsManager().bind("teleport", InstantTeleportCommand.class);
+        getCommandsManager().bind("tphere", TeleportHereCommand.class);
+        getCommandsManager().bind("tpa", DemandedTeleportCommand.class);
+        getCommandsManager().bind("tpaccept", AcceptTeleportCommand.class);
+        getCommandsManager().bind("tpdeny", RefuseTeleportCommand.class);
+        getCommandsManager().bind("tptoggle", TeleportToggleCommand.class);
 
-        commandsManager.bind("rename", RenameItemController.class);
-        commandsManager.bind("lore", LoreItemController.class);
-        commandsManager.bind("nick", RenamePlayerCommand.class);
-        commandsManager.bind("jazda", RideEntityCommand.class);
-        commandsManager.bind("speed", SpeedCommand.class);
-        commandsManager.bind("colors", ChatColorCommand.class);
+        getCommandsManager().bind("rename", RenameItemController.class);
+        getCommandsManager().bind("lore", LoreItemController.class);
+        getCommandsManager().bind("nick", RenamePlayerCommand.class);
+        getCommandsManager().bind("jazda", RideEntityCommand.class);
+        getCommandsManager().bind("speed", SpeedCommand.class);
+        getCommandsManager().bind("colors", ChatColorCommand.class);
+        getCommandsManager().bind("plots", MorePlotsCommand.class);
+        getCommandsManager().bind("ignore", IgnoreCommand.class);
+        getCommandsManager().bind("unignore", UnignoreCommand.class);
 
-        commandsManager.bind("shop", ShopCommand.class);
-        commandsManager.bind("tails", TailsCommand.class);
-        commandsManager.bind("vehicles", VehiclesCommand.class);
-        commandsManager.bind("safety", SafetyCommand.class);
-        commandsManager.bind("gamemode", GamemodeCommand.class);
-        commandsManager.bind("event", PlayerEventsCommand.class);
-        commandsManager.bind("wed", WorldEditDebugCommand.class);
-        commandsManager.bind("prefixes", PrefixesCommand.class);
-        commandsManager.bind("parkour", ParkourCommand.class);
-        commandsManager.bind("gry", GamesCommand.class);
-        commandsManager.bind("pet", PetsCommand.class);
-        commandsManager.bind("chat", ChatCommand.class);
-        commandsManager.bind("broadcast", BroadcastCommand.class);
-        commandsManager.bind("message", MessageCommand.class);
-        commandsManager.bind("response", ResponseCommand.class);
-        commandsManager.bind("sit", SitCommand.class);
-        commandsManager.bind("home", HomeCommand.class);
-        commandsManager.bind("sethome", SetHomeCommand.class);
-        commandsManager.bind("delhome", DelHomeCommand.class);
-        commandsManager.bind("warp", WarpCommand.class);
-        commandsManager.bind("setwarp", SetWarpCommand.class);
-        commandsManager.bind("delwarp", DelWarpCommand.class);
-        commandsManager.bind("openenderchest", OpenEnderchestCommand.class);
-        commandsManager.bind("openinventory", OpenInventoryCommand.class);
-        commandsManager.bind("hat", HatCommand.class);
-        commandsManager.bind("adminchat", AdminChatCommand.class);
+        getCommandsManager().bind("shop", ShopCommand.class);
+        getCommandsManager().bind("tails", TailsCommand.class);
+        getCommandsManager().bind("vehicles", VehiclesCommand.class);
+        getCommandsManager().bind("safety", SafetyCommand.class);
+        getCommandsManager().bind("gamemode", GamemodeCommand.class);
+        getCommandsManager().bind("event", PlayerEventsCommand.class);
+        getCommandsManager().bind("togglepm", ToggleMessagesCommand.class);
+        getCommandsManager().bind("wed", WorldEditDebugCommand.class);
+        getCommandsManager().bind("prefixes", PrefixesCommand.class);
+        getCommandsManager().bind("parkour", ParkourCommand.class);
+        getCommandsManager().bind("gry", GamesCommand.class);
+        getCommandsManager().bind("pet", PetsCommand.class);
+        getCommandsManager().bind("chat", ChatCommand.class);
+        getCommandsManager().bind("broadcast", BroadcastCommand.class);
+        getCommandsManager().bind("message", MessageCommand.class);
+        getCommandsManager().bind("socialspy", SocialSpyCommand.class);
+        getCommandsManager().bind("response", ResponseCommand.class);
+        getCommandsManager().bind("sit", SitCommand.class);
+        getCommandsManager().bind("home", HomeCommand.class);
+        getCommandsManager().bind("sethome", SetHomeCommand.class);
+        getCommandsManager().bind("delhome", DelHomeCommand.class);
+        getCommandsManager().bind("warp", WarpCommand.class);
+        getCommandsManager().bind("setwarp", SetWarpCommand.class);
+        getCommandsManager().bind("delwarp", DelWarpCommand.class);
+        getCommandsManager().bind("openenderchest", OpenEnderchestCommand.class);
+        getCommandsManager().bind("openinventory", OpenInventoryCommand.class);
+        getCommandsManager().bind("hat", HatCommand.class);
+        getCommandsManager().bind("adminchat", AdminChatCommand.class);
+        getCommandsManager().bind("deletevehicles", DeleteVehiclesCommand.class);
+        getCommandsManager().bind("lf", LimitFileCommand.class);
+
 
     }
-
     @Override
     public void events() {
+
         getServer().getPluginManager().registerEvents(new ChatListener(), this);
         getServer().getPluginManager().registerEvents(new SeenListener(), this);
         getServer().getPluginManager().registerEvents(new InventoryListener(), this);
         getServer().getPluginManager().registerEvents(new UsersListener(), this);
         getServer().getPluginManager().registerEvents(new MoneySignListener(), this);
         getServer().getPluginManager().registerEvents(new SafetyListener(), this);
+        getServer().getPluginManager().registerEvents(new VehiclesListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerEventsListener(), this);
         getServer().getPluginManager().registerEvents(new ColorsListener(), this);
         getServer().getPluginManager().registerEvents(new ChatBlockadesListener(), this);
-        getServer().getPluginManager().registerEvents(new BlocksListener(), this);
         getServer().getPluginManager().registerEvents(new WorldEditListener(), this);
         getServer().getPluginManager().registerEvents(new PrefixesListener(), this);
         getServer().getPluginManager().registerEvents(new AttractionsListener(), this);
         getServer().getPluginManager().registerEvents(new PetsListener(), this);
         getServer().getPluginManager().registerEvents(new SittingListener(), this);
+
+        getServer().getPluginManager().registerEvents(new WorldEditLimits(), this);
+
+        getServer().getPluginManager().registerEvents(AntyAfkManager.newInstance(), this);
+
         getServer().getPluginManager().registerEvents(chatCreator, this);
 
         redstoneListener = new RedstoneListener();
         getServer().getPluginManager().registerEvents(redstoneListener, this);
+    }
+
+    @Override
+    public void onDisable() {
+        abstractVehiclesController.save();
     }
 
     // --------
@@ -367,6 +435,10 @@ public final class Creative extends Perspectivum {
         return shopManager;
     }
 
+    public SocialSpyManager getSocialSpyManager() {
+        return socialSpyManager;
+    }
+
     public DemandsController getDemandsController() {
         return demandsController;
     }
@@ -407,14 +479,6 @@ public final class Creative extends Perspectivum {
         return blockadeActionsController;
     }
 
-    public LimitsController getLimitsController() {
-        return limitsController;
-    }
-
-    public BlocksController getBlocksController() {
-        return blocksController;
-    }
-
     public WorldEditCommandsController getWorldEditCommandsController() {
         return worldEditCommandsController;
     }
@@ -447,6 +511,30 @@ public final class Creative extends Perspectivum {
 
     public PlayablesController getPlayablesController() {
         return playablesController;
+    }
+
+    public BlockadesController getBlockadesController() {
+        return blockadesController;
+    }
+
+    public AbstractVehiclesController getAbstractVehiclesController() {
+        return abstractVehiclesController;
+    }
+
+    public PlotsData getPlotsData() {
+        return plotsData;
+    }
+
+    public ItemsController getItemsController() {
+        return itemsController;
+    }
+
+    public ChatColorDataController getChatColorDataController() {
+        return chatColorDataController;
+    }
+
+    public LimitFilesController getLimitFilesController() {
+        return limitFilesController;
     }
 }
 

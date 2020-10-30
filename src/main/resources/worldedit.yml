@@ -5,14 +5,17 @@ worldedit:
       default: '20,20,20'
       vip: '30,30,30'
       svip: '40,40,40'
+      mvip: '50,50,50'
     arguments:
       '0':
-        forbidden: '32,43,54,23'
+        limit: 'basic.txt'
     cooldown:
       default: 10
       vip: 5
       svip: 0
+      mvip: 0
     available:
       default: 10
       vip: 5
       svip: 0
+      mvip: 0

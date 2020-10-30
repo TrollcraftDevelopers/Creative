@@ -7,6 +7,7 @@ import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.user.User;
 import pl.trollcraft.creative.core.user.UsersController;
+import pl.trollcraft.creative.safety.worldedit.model.WorldEditCommand;
 
 public class WorldEditDebugCommand extends CommandController {
 
@@ -35,7 +36,7 @@ public class WorldEditDebugCommand extends CommandController {
 
         WorldEditCommand command = controller.find(args[0]);
         User user = userController.find(player.getName());
-        WorldEditComponent worldEditComponent = (WorldEditComponent) user.getComponent(WorldEditComponent.COMP_NAME);
+        WorldEditComponent worldEditComponent = user.findComponent(WorldEditComponent.COMP_NAME);
 
         if (command == null) {
             player.sendMessage(Colors.color("&cKomenda nie zostala znaleziona."));
@@ -43,13 +44,20 @@ public class WorldEditDebugCommand extends CommandController {
         }
 
         player.sendMessage(Colors.color("&eKomenda: " + command.getName()));
-        player.sendMessage(Colors.color("&eAliasy: " + command.getAliases()));
+
+        player.sendMessage(Colors.color("&eAliasy:"));
+        for (int i = 0; i < command.getAliases().length ; i++)
+            sender.sendMessage(Colors.color("&e- " + command.getAliases()[i]));
+
         player.sendMessage("");
         player.sendMessage(Colors.color("&eArgumenty:"));
 
-        command.getArguments().forEach( arg ->
-                player.sendMessage(Colors.color("&e" + arg.getOrder() + ". zakazane: " + arg.getForbidden()))
-        );
+        command.getArguments().forEach( arg -> {
+
+            player.sendMessage(Colors.color("&e" + arg.getOrder() + ". podpiete limity: "));
+            arg.getLimits().forEach(lim -> sender.sendMessage(Colors.color("&e- " + lim.getId())));
+
+        });
 
         player.sendMessage("");
         player.sendMessage(Colors.color("&eMax. zaznaczenie dla Ciebie: " + command.getMaxSelections().resolve(player)));

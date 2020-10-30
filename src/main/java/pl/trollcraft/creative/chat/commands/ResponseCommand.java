@@ -12,19 +12,17 @@ public class ResponseCommand extends CommandController {
     @Override
     public void command(CommandSender sender, String label, String[] args) {
 
-        if (!MessageCommand.getMessagesReceivers().containsKey(sender)) {
+        if (!MessageCommand.getLastReceivedFrom().containsKey(sender)) {
             sender.sendMessage(Colors.color("&cBrak rozmowcow."));
             return;
         }
 
-        Stack<String> rec = MessageCommand.getMessagesReceivers().get(sender);
+        String rec = MessageCommand.getLastReceivedFrom().get(sender);
 
-        if (rec.isEmpty()) {
+        if (rec == null) {
             sender.sendMessage(Colors.color("&cBrak rozmowcow."));
             return;
         }
-
-        String playerName = rec.pop();
 
         StringBuilder message = new StringBuilder();
         for (int i = 0 ; i < args.length ; i++) {
@@ -33,10 +31,11 @@ public class ResponseCommand extends CommandController {
         }
 
         if (sender instanceof Player)
-            ((Player) sender).performCommand("message " + playerName + " " + message.toString());
+            ((Player) sender).performCommand("message " + rec + " " + message.toString());
 
         else
-            sender.getServer().dispatchCommand(sender, "message " + playerName + " " + message.toString());
+            sender.getServer().dispatchCommand(sender, "message " + rec + " " + message.toString());
+
 
     }
 }

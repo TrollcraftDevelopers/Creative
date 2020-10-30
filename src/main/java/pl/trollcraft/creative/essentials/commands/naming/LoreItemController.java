@@ -21,7 +21,7 @@ public class LoreItemController extends CommandController  {
             return;
         }
 
-        if (!sender.hasPermission("creative.rename")) {
+        if (!sender.hasPermission("creative.lore")) {
             sender.sendMessage(Colors.color("&cBrak uprawnien!"));
             return;
         }

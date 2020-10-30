@@ -35,8 +35,7 @@ public class PetSelectView {
         PetsComponent petsComponent = user.findComponent(PetsComponent.COMP_NAME);
 
         int slot = 0;
-        System.out.println("Liczba zakupionych: " + petsComponent.getPets().size());
-        for (String petName : petsComponent.getPets()) {
+        for (String petName : petsComponent.getPets().keySet()) {
 
             Pet pet = Creative.getPlugin()
                     .getPetsController()
@@ -88,6 +87,10 @@ public class PetSelectView {
     // ----
 
     private Material getMaterial(EntityType type) {
+        Material m = Material.getMaterial(type.name() + "_SPAWN_EGG");
+        if (m == null)
+            return Material.getMaterial(type.name() + "_SKULL");
+
         return Objects.requireNonNull(Material.getMaterial(type.name() + "_SPAWN_EGG"));
     }
 

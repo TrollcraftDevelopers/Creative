@@ -1,1 +1,7 @@
-plots: {}
+plots:
+  max: 10
+  prices:
+    mvip: 100
+    svip: 250
+    vip: 500
+    default: 1000

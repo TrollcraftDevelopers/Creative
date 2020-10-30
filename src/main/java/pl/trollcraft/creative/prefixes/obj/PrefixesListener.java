@@ -12,7 +12,7 @@ public class PrefixesListener implements Listener {
 
         User user = event.getUser();
 
-        if (user.getComponent(PrefixesComponent.COMP_NAME) == null)
+        if (!user.hasComponent(PrefixesComponent.COMP_NAME))
             user.addComponent(new PrefixesComponent());
 
     }

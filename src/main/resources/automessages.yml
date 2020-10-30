@@ -1,4 +1,5 @@
 automessages:
   interval: 60
+  prefix: '&e[Creative]'
   messages:
-    - 'Wiadomosc testowa'
+    - '&2Test'

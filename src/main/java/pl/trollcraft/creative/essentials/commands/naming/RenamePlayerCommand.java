@@ -11,7 +11,7 @@ public class RenamePlayerCommand extends CommandController {
     @Override
     public void command(CommandSender sender, String label, String[] args) {
 
-        if (!sender.hasPermission("creative.vip")) {
+        if (!sender.hasPermission("creative.nick")) {
             sender.sendMessage(Colors.color("&cKomenda dostepna dla graczy VIP."));
             return;
         }
@@ -21,7 +21,7 @@ public class RenamePlayerCommand extends CommandController {
             sender.sendMessage(Colors.color("&e/nick <nowy_nick> -&7 zmienia nazwe na chat'cie."));
             sender.sendMessage(Colors.color("&e/nick reset -&7 resetuje nazwe na chat'cie."));
 
-            if (sender.hasPermission("creative.admin")) {
+            if (sender.hasPermission("creative.nick.others")) {
                 sender.sendMessage(Colors.color("&e/nick <gracz> <nowy_nick> -&7 zmienia nazwe gracza na chat'cie."));
                 sender.sendMessage(Colors.color("&e/nick <gracz> reset -&7 resetuje nazwe gracza na chat'cie."));
             }
@@ -67,7 +67,7 @@ public class RenamePlayerCommand extends CommandController {
                     sender.sendMessage(Colors.color("&7Nick gracza zostal zresetowany."));
                 }
                 else {
-                    player.setDisplayName(Colors.color(args[0].replace('_', ' ')));
+                    player.setDisplayName(Colors.color(args[1].replace('_', ' ')));
                     sender.sendMessage(Colors.color("&aNazwa gracza zostala zmieniona!"));
                 }
 

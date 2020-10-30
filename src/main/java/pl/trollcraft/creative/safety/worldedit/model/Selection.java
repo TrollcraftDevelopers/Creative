@@ -1,4 +1,4 @@
-package pl.trollcraft.creative.safety.worldedit;
+package pl.trollcraft.creative.safety.worldedit.model;
 
 public class Selection {
 

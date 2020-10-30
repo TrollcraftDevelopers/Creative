@@ -1,1 +1,5 @@
-vehicles: {}
+vehicles:
+  'blackBike':
+    type: bike
+    subType: BLACK
+    name: '&7Zwykly &8czarny &7Cross'

@@ -1,5 +1,7 @@
 package pl.trollcraft.creative.essentials.money;
 
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -13,17 +15,9 @@ import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.help.Help;
 
-import java.util.HashMap;
 import java.util.Objects;
 
-//TODO make signs more complex!
-//TODO make signs more complex!
-//TODO make signs more complex!
 public class MoneySignListener implements Listener {
-
-    private static final long MONEY_SIGN_COOLDOWN = 1000*60*5;
-
-    private HashMap<String, Long> limits = new HashMap<>();
 
     @EventHandler
     public void onInteract (PlayerInteractEvent event) {
@@ -43,23 +37,21 @@ public class MoneySignListener implements Listener {
                 if (lines[2].equals(event.getPlayer().getName()))
                     return;
 
-                if (!canUseMoneySign(event.getPlayer())) {
-                    event.getPlayer().sendMessage(Colors.color("&cZnakow mozna uzywac co &e5 minut."));
-                    return;
-                }
 
                 String playerName = lines[2];
                 OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
 
                 double money = Double.parseDouble(lines[3].substring(0, lines[3].length() - 2));
 
-                Creative.getPlugin().getEconomy().withdrawPlayer(player, money);
-                Creative.getPlugin().getEconomy().depositPlayer(event.getPlayer(), money);
+                Economy eco = Creative.getPlugin().getEconomy();
 
-                limits.put(event.getPlayer().getName(), System.currentTimeMillis() + MONEY_SIGN_COOLDOWN);
-
-                event.getPlayer().sendMessage(Colors.color("&aOtrzymano &e" + money + " TC.&a od &e" + lines[2]));
-
+                EconomyResponse res = eco.withdrawPlayer(event.getPlayer(), money);
+                if (res.transactionSuccess()) {
+                    Creative.getPlugin().getEconomy().depositPlayer(player, money);
+                    event.getPlayer().sendMessage(Colors.color("&aWyslano &e" + money + "TC &a do &e" + lines[2]));
+                }
+                else
+                    event.getPlayer().sendMessage(Colors.color("&cBrak srodkow do przekazania."));
 
             }
 
@@ -89,14 +81,5 @@ public class MoneySignListener implements Listener {
 
     }
 
-    private boolean canUseMoneySign(Player player) {
-
-        String name = player.getName();
-        if (!limits.containsKey(name))
-            return true;
-
-        return System.currentTimeMillis() >= limits.get(name);
-
-    }
 
 }

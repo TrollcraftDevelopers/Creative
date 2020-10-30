@@ -1,32 +1,43 @@
 package pl.trollcraft.creative.services.pets;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import pl.trollcraft.creative.core.user.UserComponent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class PetsComponent implements UserComponent {
 
     public static final String COMP_NAME = "PetsComponent";
 
-    private List<String> pets;
+    /**
+     * Contains pet ID and name.
+     */
+    private HashMap<String, String> pets;
 
     public PetsComponent() {
-        pets = new ArrayList<>();
+        pets = new HashMap<>();
     }
 
-    public boolean hasPet(String name) {
-        return pets.contains(name);
+    public boolean hasPet(String id) {
+        return pets.containsKey(id);
     }
 
-    public void addPet(String name) {
-        pets.add(name);
+    public void addPet(String id) {
+        pets.put(id, "");
     }
 
-    public List<String> getPets() {
+    public HashMap<String, String> getPets() {
         return pets;
+    }
+
+    public String getPetName(String petId) {
+        return pets.getOrDefault(petId, null);
+    }
+
+    public void setPetName(String petId, String petName) {
+        if (pets.containsKey(petId))
+            pets.replace(petId, petName);
+        else throw new IllegalStateException("Player hasn't pet " + petName);
     }
 
     @Override
@@ -36,12 +47,19 @@ public class PetsComponent implements UserComponent {
 
     @Override
     public void save(YamlConfiguration conf, String path) {
-        conf.set(path + ".pets", pets);
+        pets.forEach( (petId, petName) ->
+            conf.set(path + ".pets." + petId + ".name", petName)
+        );
     }
 
     @Override
     public void load(YamlConfiguration conf, String path) {
-        pets = conf.getStringList(path + ".pets");
+        conf.getConfigurationSection(path + ".pets")
+                .getKeys(false)
+                .forEach( petId -> {
+                    String name = conf.getString(path + ".pets." + petId + ".name");
+                    pets.put(petId, name);
+                } );
     }
 
     @Override

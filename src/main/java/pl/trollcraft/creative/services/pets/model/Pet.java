@@ -79,7 +79,15 @@ public class Pet implements Service {
     @Override
     public void serve(Player player) {
 
+        PetsComponent petsComponent = Creative
+                .getPlugin()
+                .getUserController()
+                .find(player.getName())
+                .findComponent(PetsComponent.COMP_NAME);
+        assert petsComponent != null;
+
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(entityType, Colors.color(name));
+        npc.setName(petsComponent.getPetName(id));
         npc.spawn(player.getLocation());
 
         npc.getNavigator().getLocalParameters().baseSpeed(2);

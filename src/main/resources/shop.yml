@@ -12,7 +12,7 @@ shop: # główna karta sklepu
             - '&eWspaniale serduszka!'
           slot: 8
           price: 100
-          service: 'tails/heart' # usługa, która zostanie odblokowana graczowi po zakupie
+          service: 'tails/WATER_BUBBLE' # usługa, która zostanie odblokowana graczowi po zakupie
           iconItemStack:
             type: APPLE
             data: 0

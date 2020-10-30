@@ -29,9 +29,15 @@ public class VehiclesCommand extends CommandController {
 
         UsersController usersController = Creative.getPlugin().getUserController();
         User user = usersController.find(player.getName());
-        VehiclesComponent vehiclesComponent = (VehiclesComponent) user.getComponent(VehiclesComponent.COMP_NAME);
 
-        openMenu(player, vehiclesComponent.getVehiclesAvailable());
+        VehiclesComponent vehiclesComponent = user.findComponent(VehiclesComponent.COMP_NAME);
+        assert vehiclesComponent != null;
+
+        if (vehiclesComponent.isEmpty())
+            player.sendMessage(Colors.color("&cBrak zakupionych pojazdow.\n&7Aby zakupic - uzyj komendy &e/sklep."));
+
+        else
+            openMenu(player, vehiclesComponent.getVehiclesAvailable());
     }
 
     private void openMenu(Player player, List<String> vehicles) {

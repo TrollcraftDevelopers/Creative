@@ -20,16 +20,15 @@ public class GamemodeCommand extends CommandController {
         Player player = (Player) sender;
 
         if (args.length == 0) {
-            player.sendMessage("&7Uzycie: &e/gamemode 0 - tryb przetrwania,");
-            player.sendMessage("&7Uzycie: &e/gamemode 1 - tryb kreatywny,");
-            player.sendMessage("&7Uzycie: &e/gamemode 2 - tryb przygodowy,");
-            player.sendMessage("&7Uzycie: &e/gamemode 3 - tryb obserwatora.");
+            player.sendMessage(Colors.color("&7Uzycie: &e/gamemode 0 - tryb przetrwania,"));
+            player.sendMessage(Colors.color("&7Uzycie: &e/gamemode 1 - tryb kreatywny,"));
+            player.sendMessage(Colors.color("&7Uzycie: &e/gamemode 2 - tryb przygodowy,"));
             return;
         }
 
         int mode = Help.isInteger(args[0], -1);
 
-        if (mode < 0 || mode > 3) {
+        if (mode < 0 || mode > 2) {
             player.sendMessage(Colors.color("&cZly tryb."));
             return;
         }

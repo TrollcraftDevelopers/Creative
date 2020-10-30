@@ -1,7 +1,9 @@
 package pl.trollcraft.creative.services.vehicles;
 
+import es.pollitoyeye.vehicles.enums.VehicleType;
+import es.pollitoyeye.vehicles.interfaces.VehicleSubType;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.user.UserComponent;
 
 import java.util.ArrayList;
@@ -27,6 +29,14 @@ public class VehiclesComponent implements UserComponent {
 
     public void addVehicle(String vehicleAvailable) {
         this.vehiclesAvailable.add(vehicleAvailable);
+    }
+
+    public boolean canUse(VehicleType type, String subType) {
+        VehiclesController vehiclesController = Creative.getPlugin().getVehiclesController();
+        return vehiclesAvailable.stream()
+                .map(vehiclesController::find)
+                .filter( v -> v.getType().equalsIgnoreCase(type.name()) )
+                .anyMatch(v -> v.getSubType().equalsIgnoreCase(subType) );
     }
 
     // -------- ------- -------- -------- -------- --------

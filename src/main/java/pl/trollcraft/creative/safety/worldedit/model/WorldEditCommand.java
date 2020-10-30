@@ -1,4 +1,4 @@
-package pl.trollcraft.creative.safety.worldedit;
+package pl.trollcraft.creative.safety.worldedit.model;
 
 import pl.trollcraft.creative.core.user.GroupValues;
 
@@ -32,11 +32,8 @@ public class WorldEditCommand {
         return name;
     }
 
-    public String getAliases() {
-        StringBuilder builder = new StringBuilder();
-        for (String s : aliases)
-            builder.append(s + ", ");
-        return builder.toString();
+    public String[] getAliases() {
+        return aliases;
     }
 
     public Argument getArgument(int order) {
@@ -62,18 +59,4 @@ public class WorldEditCommand {
         return available;
     }
 
-    // -------- -------- -------- --------
-
-    @Override
-    public boolean equals(Object obj) {
-        String[] command = ((String) obj).split(" ");
-
-        if (command[0].equalsIgnoreCase(name)) return true;
-        else {
-            for (String s : aliases)
-                if (s.equalsIgnoreCase(command[0]))
-                    return true;
-            return false;
-        }
-    }
 }

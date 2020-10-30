@@ -1,5 +1,6 @@
 package pl.trollcraft.creative.essentials.teleport.demanded;
 
+import de.myzelyam.api.vanish.VanishAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,12 +33,15 @@ public class DemandedTeleportCommand extends CommandController {
             return;
         }
 
-        if(!target.hasPermission("creative.tptoggle.bypass")){
-            if(TeleportToggleCommand.players_toggles.containsKey(targetName)){
-                if(!TeleportToggleCommand.players_toggles.get(targetName)){
-                    sender.sendMessage(Colors.color("&cTen gracz ma wylaczona mozliwosc teleportacji!"));
-                    return;
-                }
+        if (VanishAPI.isInvisible(target)) {
+            sender.sendMessage(Colors.color("&cBrak gracza " + targetName));
+            return;
+        }
+
+        if(TeleportToggleCommand.players_toggles.containsKey(targetName)){
+            if(!TeleportToggleCommand.players_toggles.get(targetName)){
+                sender.sendMessage(Colors.color("&cTen gracz ma wylaczona mozliwosc teleportacji!"));
+                return;
             }
         }
 

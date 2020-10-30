@@ -1,39 +1,68 @@
 package pl.trollcraft.creative.safety.worldedit;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.Configs;
 import pl.trollcraft.creative.core.controlling.Controller;
+import pl.trollcraft.creative.core.help.Help;
 import pl.trollcraft.creative.core.user.GroupValues;
+import pl.trollcraft.creative.safety.limits.file.LimitFile;
+import pl.trollcraft.creative.safety.limits.file.LimitFilesController;
+import pl.trollcraft.creative.safety.worldedit.model.Argument;
+import pl.trollcraft.creative.safety.worldedit.model.Selection;
+import pl.trollcraft.creative.safety.worldedit.model.WorldEditCommand;
 
 import java.util.ArrayList;
 
 public class WorldEditCommandsController extends Controller<WorldEditCommand, String> {
 
+    private final LimitFilesController controller
+            = Creative.getPlugin().getLimitFilesController();;
+
+    @Override
+    public WorldEditCommand find(String id) {
+
+        return instances.stream()
+                .filter(wec -> wec.getName().equalsIgnoreCase(id) || Help.isInArray(wec.getAliases(), id))
+                .findAny()
+                .orElse(null);
+
+    }
+
     public void load() {
 
         YamlConfiguration conf = Configs.load("worldedit.yml");
+        assert conf != null;
 
         conf.getConfigurationSection("worldedit").getKeys(false).forEach( command -> {
 
             ArrayList<Argument> args = new ArrayList<>();
-            conf.getConfigurationSection("worldedit." + command + ".arguments").getKeys(false).forEach( ordStr ->
-                args.add(new Argument(
-                        Integer.parseInt(ordStr),
-                        conf.getString("worldedit." + command + ".arguments." + ordStr + ".forbidden").split(",")))
-            );
+            conf.getConfigurationSection("worldedit." + command + ".arguments").getKeys(false).forEach( ordStr -> {
+
+                Argument arg = new Argument(Integer.parseInt(ordStr));
+                String forbidden = conf.getString("worldedit." + command + ".arguments." + ordStr + ".forbidden");
+
+                arg.addLimit(controller.find(forbidden));
+
+                args.add(arg);
+
+            });
 
             GroupValues<Selection> maxSelections = new GroupValues<>();
             GroupValues<Integer> cooldown = new GroupValues<>(),
                                  available = new GroupValues<>();
 
+            maxSelections.add("creative.mvip", new Selection(conf.getString("worldedit." + command + ".maxSelections.mvip")));
             maxSelections.add("creative.svip", new Selection(conf.getString("worldedit." + command + ".maxSelections.svip")));
             maxSelections.add("creative.vip", new Selection(conf.getString("worldedit." + command + ".maxSelections.vip")));
             maxSelections.add("creative.player", new Selection(conf.getString("worldedit." + command + ".maxSelections.default")));
 
+            cooldown.add("creative.mvip", conf.getInt("worldedit." + command + ".cooldown.mvip"));
             cooldown.add("creative.svip", conf.getInt("worldedit." + command + ".cooldown.svip"));
             cooldown.add("creative.vip", conf.getInt("worldedit." + command + ".cooldown.vip"));
             cooldown.add("creative.player", conf.getInt("worldedit." + command + ".cooldown.default"));
 
+            available.add("creative.mvip", conf.getInt("worldedit." + command + ".available.mvip"));
             available.add("creative.svip", conf.getInt("worldedit." + command + ".available.svip"));
             available.add("creative.vip", conf.getInt("worldedit." + command + ".available.vip"));
             available.add("creative.player", conf.getInt("worldedit." + command + ".available.default"));
@@ -46,24 +75,6 @@ public class WorldEditCommandsController extends Controller<WorldEditCommand, St
             register(worldEditCommand);
 
         } );
-
-        /*ArrayList<Argument> args = new ArrayList<>();
-        args.add(new Argument(0, new String[] {"stone", "54"}));
-
-        GroupValues<Integer> cooldown = new GroupValues<>()
-                .add("creative.svip", 10)
-                .add("creative.vip", 15)
-                .add("creative.player", 20);
-
-        GroupValues<Integer> available = new GroupValues<>()
-                .add("creative.svip", 0)
-                .add("creative.vip", 0)
-                .add("creative.player", 3600);
-
-        WorldEditCommand command = new WorldEditCommand("//set", new String[] {"/set"}, args,
-                cooldown, available);
-
-        register(command);*/
 
     }
 

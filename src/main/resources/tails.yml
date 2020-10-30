@@ -1,8 +1,5 @@
 tails:
-  hearts:
-    title: 'Serduszka'
-    particles: 'ColoredParticles/REDSTONE_DUST'
-    particlesData: '234:232:34:5' #r:g:b:size
-    amount: 5
-    data: 2
+  'WATER_BUBBLE':
+    title: '&b&lBabelki'
+    particles: 'WATER_BUBBLE;16;0.2;0.2;0.2'
     engine: ClassicTail

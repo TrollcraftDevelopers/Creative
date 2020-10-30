@@ -10,64 +10,81 @@ import pl.trollcraft.creative.core.gui.GUI;
 import pl.trollcraft.creative.core.help.Colors;
 import pl.trollcraft.creative.core.items.ItemStackBuilder;
 import pl.trollcraft.creative.core.user.User;
+import pl.trollcraft.creative.essentials.colors.data.ChatColorData;
+import pl.trollcraft.creative.essentials.colors.data.ChatColorDataController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ChatColorCommand extends CommandController {
 
     @Override
     public void command(CommandSender sender, String label, String[] args) {
 
-        if (!sender.hasPermission("creative.vip")) {
-            sender.sendMessage(Colors.color("&cKomenda jedynie dla graczy VIP"));
+        if (!sender.hasPermission("creative.colors")) {
+            sender.sendMessage(Colors.color("&cBrak uprawnien."));
             return;
         }
 
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Komenda jedynie dla graczy online.");
-            return;
+        if (args.length == 0) {
+
+            if (!(sender instanceof Player)) {
+                sender.sendMessage("Komenda jedynie dla graczy online.");
+                return;
+            }
+
+            Player player = (Player) sender;
+            openGUI(player);
+
         }
+        else if (args.length == 2) {
 
-        Player player = (Player) sender;
-        openGUI(player);
+            if (!sender.hasPermission("creative.colors.others")) {
+                sender.sendMessage(Colors.color("&cBrak uprawnien."));
+                return;
+            }
 
-    }
+            User user = Creative.getPlugin().getUserController().find(args[0]);
+            if (user == null)
+                sender.sendMessage(Colors.color("&cBrak gracza"));
 
-    private ArrayList<String> colors;
+            else {
 
-    public ChatColorCommand () {
-        colors = new ArrayList<>();
-        colors.add(Colors.color("&a"));
-        colors.add(Colors.color("&b"));
-        colors.add(Colors.color("&c"));
-        colors.add(Colors.color("&d"));
-        colors.add(Colors.color("&e"));
-        colors.add(Colors.color("&f"));
-        colors.add(Colors.color("&1"));
-        colors.add(Colors.color("&2"));
-        colors.add(Colors.color("&3"));
-        colors.add(Colors.color("&4"));
-        colors.add(Colors.color("&5"));
-        colors.add(Colors.color("&6"));
-        colors.add(Colors.color("&7"));
-        colors.add(Colors.color("&8"));
-        colors.add(Colors.color("&9"));
+                ChatColorsComponent component = user.findComponent(ChatColorsComponent.COMP_NAME);
+                component.setColor(args[1]);
+
+                sender.sendMessage(Colors.color("&aZmieniono kolor graczowi."));
+
+            }
+
+        }
+        else
+            sender.sendMessage(Colors.color("&eUzycie: &7/colors (gracz) (kolor)"));
+
     }
 
     private void openGUI(Player player) {
 
+        ChatColorDataController controller = Creative.getPlugin()
+                .getChatColorDataController();
+
         GUI gui = new GUI(27, Colors.color("&a&lKolory"));
         ItemStack itemStack;
 
+        List<ChatColorData> colors = controller.findAll(player);
+        ChatColorData data;
+
         for (int i = 0 ; i < colors.size() ; i++) {
+
+            data = colors.get(i);
 
             itemStack = ItemStackBuilder
                     .init(Material.PAPER)
-                    .name(Colors.color(colors.get(i) + "███"))
+                    .name(Colors.color(colors.get(i).getColor() + "███"))
                     .lore(Colors.color("//&eKliknij, by uzywac."))
                     .build();
 
-            String color = colors.get(i);
+            String color = data.getColor();
             gui.addItem(i, itemStack, e -> {
 
                 e.setCancelled(true);

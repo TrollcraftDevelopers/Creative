@@ -23,6 +23,18 @@ commands:
   tptoggle:
     description: Enables/Disables to demand a teleport
 
+  chunkdebug:
+    description: Debugs a chunk.
+
+  ignore:
+    description: Ignores the player.
+  unignore:
+    description: Stops ignoring the player.
+
+  give:
+    description: Gives an item to a player,
+    aliases: [i, daj, item]
+
   rename:
     description: Changes name of an item.
     aliases: [nazwa]
@@ -34,9 +46,18 @@ commands:
   jazda:
     description: Ride a mob.
 
+  deletevehicles:
+    description: Deletes vehicles belonging to the certain player.
+
   shop:
     description: Displays the shop.
     aliases: [sklep, skl, sho, shp]
+
+  socialspy:
+    description: Spying on players messages.
+    aliases: [ss, spy]
+  togglepm:
+    description: Toggles /message command.
 
   seen:
     description: See when the player was last time online.
@@ -113,6 +134,10 @@ commands:
     description: Makes the player sit.
     aliases: [usiadz, siadz]
 
+  plots:
+    description: Opens plots panel.
+    aliases: [wiecejdzialek, moreplots]
+
   gry:
     description: Games command.
     aliases: [games, gra, game]
@@ -152,3 +177,9 @@ commands:
 
   hat:
     description: Wear anything on your head
+
+  preload:
+    description: Reloading system.
+
+  lf:
+    description: Limits File debug command.

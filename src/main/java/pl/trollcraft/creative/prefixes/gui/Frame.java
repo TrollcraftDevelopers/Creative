@@ -1,5 +1,7 @@
 package pl.trollcraft.creative.prefixes.gui;
 
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -71,8 +73,8 @@ public class Frame{
         this.prefixes = prefixes;
 
         this.player = player;
-        component = (PrefixesComponent) Creative.getPlugin().getUserController()
-                .find(player.getName()).getComponent(PrefixesComponent.COMP_NAME);
+        component = Creative.getPlugin().getUserController()
+                .find(player.getName()).findComponent(PrefixesComponent.COMP_NAME);
 
         page = 0;
     }
@@ -171,10 +173,10 @@ public class Frame{
             itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(prefix.getName());
 
-            Consumer<InventoryClickEvent> click = null;
+            Consumer<InventoryClickEvent> click;
 
             if (prefix.getId().equals(component.getCurrent())) {
-                itemMeta.setLore(Arrays.asList(new String[]{"", Colors.color("&eW uzyciu."), Colors.color("&eKliknij, by odpiac.")}));
+                itemMeta.setLore(Arrays.asList("", Colors.color("&eW uzyciu."), Colors.color("&eKliknij, by odpiac.")));
 
                 click = e -> {
                     e.setCancelled(true);
@@ -188,13 +190,13 @@ public class Frame{
             }
 
             else if (component.hasPrefix(prefix.getId()) || player.hasPermission("creative.prefix." + prefix.getId())) {
-                itemMeta.setLore(Arrays.asList(new String[]{"", Colors.color("&aKliknij, by uzyc.")}));
+                itemMeta.setLore(Arrays.asList("", Colors.color("&aKliknij, by uzyc.")));
 
                 click = e -> {
                     e.setCancelled(true);
-                    PrefixesComponent comp = (PrefixesComponent) Creative.getPlugin().getUserController()
+                    PrefixesComponent comp = Creative.getPlugin().getUserController()
                             .find(player.getName())
-                            .getComponent(PrefixesComponent.COMP_NAME);
+                            .findComponent(PrefixesComponent.COMP_NAME);
 
                     comp.setCurrent(finalPrefix.getId());
                     display();
@@ -203,15 +205,22 @@ public class Frame{
 
             else if (prefix.isAvailable()) {
                 itemMeta.setLore(Arrays.asList(
-                        new String[]{"", Colors.color("&aKliknij, by zakupic."), Colors.color("&eCena: &e&l" + prefix.getPrice() + "TC.")}));
+                        "", Colors.color("&aKliknij, by zakupic."), Colors.color("&eCena: &e&l" + prefix.getPrice() + "TC.")));
 
+                Prefix finalPrefix1 = prefix;
                 click = e -> {
                     e.setCancelled(true);
-                    PrefixesComponent comp = (PrefixesComponent) Creative.getPlugin().getUserController()
+                    PrefixesComponent comp = Creative.getPlugin().getUserController()
                             .find(player.getName())
-                            .getComponent(PrefixesComponent.COMP_NAME);
+                            .findComponent(PrefixesComponent.COMP_NAME);
 
-                    //BUY LOGIC
+                    Economy eco = Creative.getPlugin().getEconomy();
+                    EconomyResponse res = eco.withdrawPlayer(player, finalPrefix1.getPrice());
+
+                    if (!res.transactionSuccess()) {
+                        player.sendMessage(Colors.color("Brak srodkow do zakupu."));
+                        return;
+                    }
 
                     comp.addPrefix(finalPrefix.getId());
                     display();
@@ -220,8 +229,8 @@ public class Frame{
             }
             else if (player.hasPermission("creative.mvip")) {
 
-                itemMeta.setLore(Arrays.asList(new String[]{"", Colors.color("&aTen prefix jest dostepny"),
-                    Colors.color("&adopoki posiadasz range MVIP."), "", Colors.color("&aKliknij, by uzyc.")}));
+                itemMeta.setLore(Arrays.asList("", Colors.color("&aTen prefix jest dostepny"),
+                        Colors.color("&adopoki posiadasz range MVIP."), "", Colors.color("&aKliknij, by uzyc.")));
 
                 click = e -> {
                     e.setCancelled(true);
@@ -237,7 +246,7 @@ public class Frame{
 
             else {
                 itemMeta.setLore(Arrays.asList(
-                        new String[]{"", Colors.color("&cNiedostepny."), Colors.color("&eWymagana ranga MVIP.")}));
+                        "", Colors.color("&cNiedostepny."), Colors.color("&eWymagana ranga MVIP.")));
 
                 click = e -> e.setCancelled(true);
 

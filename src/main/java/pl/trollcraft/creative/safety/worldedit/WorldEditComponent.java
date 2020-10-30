@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import pl.trollcraft.creative.Creative;
 import pl.trollcraft.creative.core.help.Help;
 import pl.trollcraft.creative.core.user.UserComponent;
+import pl.trollcraft.creative.safety.worldedit.model.WorldEditCommand;
 
 import java.util.ArrayList;
 

@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import pl.trollcraft.creative.core.controlling.Controller;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class PlayablesController extends Controller<Playable, String> {
@@ -20,6 +21,22 @@ public class PlayablesController extends Controller<Playable, String> {
                 .filter( p -> p.getName().equals(name) )
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * Finds random game.
+     *
+     * @return
+     */
+    public Playable random() {
+        int c = (int) instances.stream()
+                .filter( playable -> !playable.isConserved() )
+                .count();
+
+        return instances.stream()
+                .filter( playable -> !playable.isConserved())
+                .collect(Collectors.toList())
+                .get(new Random().nextInt(c));
     }
 
     /**

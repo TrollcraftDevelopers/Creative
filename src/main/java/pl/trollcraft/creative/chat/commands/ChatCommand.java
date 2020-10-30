@@ -8,6 +8,9 @@ import pl.trollcraft.creative.chat.ChatProfile;
 import pl.trollcraft.creative.core.commands.CommandController;
 import pl.trollcraft.creative.core.help.Colors;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ChatCommand extends CommandController {
 
     @Override
@@ -73,6 +76,23 @@ public class ChatCommand extends CommandController {
             return;
         }
 
-        return;
+        if (args[0].equalsIgnoreCase("clear")) {
+
+            if (!sender.hasPermission("creative.chat.clear")) {
+                sender.sendMessage(Colors.color("&cBrak uprawnien."));
+                return;
+            }
+
+            List<Player> players = Bukkit.getOnlinePlayers().stream()
+                    .filter( p -> !p.hasPermission("creative.chat.admin"))
+                    .collect(Collectors.toList());
+
+            for (int i = 0 ; i < 30 ; i++)
+                players.forEach( p -> p.sendMessage("") );
+
+            players.forEach(p -> p.sendMessage(Colors.color("&aChat zostal &ewyczyszczony.\n\n")));
+
+        }
+
     }
 }
