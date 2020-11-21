@@ -66,6 +66,7 @@ public class Vehicle implements Service {
         UsersController usersController = Creative.getPlugin().getUserController();
         User user = usersController.find(name);
         VehiclesComponent vehiclesComponent = user.findComponent(VehiclesComponent.COMP_NAME);
+        assert vehiclesComponent != null;
         vehiclesComponent.addVehicle(id);
     }
 
@@ -73,6 +74,7 @@ public class Vehicle implements Service {
     public void serve(Player player) {
         VehicleType type = VehicleType.valueOf(this.type.toUpperCase());
         VehicleSubType subType =  getVehicleSubType(type, this.subType); //main.vehicleSubTypeFromString(type, this.subType);
+        assert subType != null;
         type.getVehicleManager().giveItem(player, subType.getName());
     }
 

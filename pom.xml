@@ -24,8 +24,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -79,6 +79,13 @@
     </repositories>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1</version>
+        </dependency>
+
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
@@ -107,10 +114,10 @@
 
         <dependency>
             <groupId>org.plotsquared</groupId>
-            <artifactId>plotswuared</artifactId>
-            <version>4.4.495</version>
+            <artifactId>plotsquared</artifactId>
+            <version>5.13.8</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/PlotSquared-Bukkit-5.13.6-Premium.jar</systemPath>
+            <systemPath>${project.basedir}/lib/PlotSquared-Bukkit-5.13.8-Premium.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -119,14 +126,6 @@
             <version>2.10.9</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/PlaceholderAPI-2.10.9.jar</systemPath>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>CraftBukkit</artifactId>
-            <version>1.14.4-R0.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/craftbukkit-1.14.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
 
         <dependency>
@@ -164,7 +163,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>worldguard</artifactId>
-            <version>1.7.2</version>
+            <version>7.03</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/worldguard-bukkit-7.0.3.jar</systemPath>
         </dependency>

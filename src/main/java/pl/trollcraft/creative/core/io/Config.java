@@ -15,20 +15,20 @@ public class Config implements AutoCloseable{
      * Core object of the config
      * - the file.
      */
-    private File file;
+    private final File file;
 
     /**
      * Processed yaml configuration
      * model.
      */
-    private YamlConfiguration yaml;
+    private final YamlConfiguration yaml;
 
     /**
      * Creates all the needed directories
      * and the file.
      *
      * @param path location of the file.
-     * @throws IOException
+     * @throws IOException thrown when file does not exist
      */
     public Config (String path, String fileName) throws IOException, InvalidConfigurationException {
 

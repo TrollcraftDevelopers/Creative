@@ -44,6 +44,8 @@ import pl.trollcraft.creative.essentials.giving.ItemsController;
 import pl.trollcraft.creative.essentials.plots.MorePlotsCommand;
 import pl.trollcraft.creative.essentials.plots.PlotsData;
 import pl.trollcraft.creative.essentials.seen.SeenComponent;
+import pl.trollcraft.creative.safety.limits.chunks.ChunkLimitsController;
+import pl.trollcraft.creative.safety.limits.chunks.ChunkLimitsListener;
 import pl.trollcraft.creative.safety.limits.file.LimitFileCommand;
 import pl.trollcraft.creative.safety.limits.file.LimitFilesController;
 import pl.trollcraft.creative.safety.players.VoidFallPreventer;
@@ -160,6 +162,8 @@ public final class Creative extends Perspectivum {
     private PetsController petsController;
     private PetSessionsController petSessionsController;
 
+    private ChunkLimitsController chunkLimitsController;
+
     private ChatCreator chatCreator;
 
     private RedstoneListener redstoneListener;
@@ -223,6 +227,7 @@ public final class Creative extends Perspectivum {
         limitFilesController.configure();
 
         worldEditCommandsController = new WorldEditCommandsController();
+        chunkLimitsController = new ChunkLimitsController();
 
         demandsController = new DemandsController();
         userController = new UsersController();
@@ -372,6 +377,7 @@ public final class Creative extends Perspectivum {
         getServer().getPluginManager().registerEvents(new SittingListener(), this);
 
         getServer().getPluginManager().registerEvents(new WorldEditLimits(), this);
+        getServer().getPluginManager().registerEvents(new ChunkLimitsListener(), this);
 
         getServer().getPluginManager().registerEvents(AntyAfkManager.newInstance(), this);
 
@@ -384,6 +390,7 @@ public final class Creative extends Perspectivum {
     @Override
     public void onDisable() {
         abstractVehiclesController.save();
+        chunkLimitsController.save();
     }
 
     // --------
@@ -535,6 +542,10 @@ public final class Creative extends Perspectivum {
 
     public LimitFilesController getLimitFilesController() {
         return limitFilesController;
+    }
+
+    public ChunkLimitsController getChunkLimitsController() {
+        return chunkLimitsController;
     }
 }
 
